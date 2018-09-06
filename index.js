@@ -165,7 +165,8 @@ app.get("/user", function(req, res) {
 app.post("/picupload", uploader.single("file"), s3.upload, function(req, res) {
     updateProfilePic(req.session.userID, config.s3Url + req.file.filename).then(
         function(imageUrl) {
-            console.log("IMAGE URL", imageUrl);
+            console.log("IMAGE URL", imageUrl.rows[0].imageurl);
+            req.session.imageUrl = imageUrl.rows[0].imageurl;
             res.json(imageUrl.rows[0]);
         }
     );
