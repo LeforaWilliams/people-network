@@ -26,3 +26,12 @@ module.exports.registerUser = function registerUser(
 module.exports.loginUser = function loginUser(email) {
     return db.query("SELECT * FROM users WHERE email= $1", [email]);
 };
+
+module.exports.updateProfilePic = function(userID, imageURL) {
+    return db.query(
+        `UPDATE users
+        SET imageUrl= $2 
+        WHERE id= $1`,
+        [userID, imageUrl || null]
+    );
+};

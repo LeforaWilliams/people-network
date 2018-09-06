@@ -20,7 +20,7 @@ export class Registration extends React.Component {
 
     submit() {
         axios
-            .post("/welcome", {
+            .post("/register", {
                 email: this.email,
                 password: this.password,
                 firstname: this.firstname,
@@ -28,7 +28,7 @@ export class Registration extends React.Component {
             })
             .then(({ data }) => {
                 if (data.success) {
-                    location.replace("/homepage");
+                    location.replace("/");
                 } else {
                     this.setState({
                         error: true

@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-const { registerUser, loginUser } = require("./sql/dbRequests.js");
+const {
+    registerUser,
+    loginUser,
+    updateProfilePic
+} = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
 const csurf = require("csurf");
@@ -39,13 +43,6 @@ app.use(express.static("./public"));
 
 ////////////////////////////////////////////////////////////////////////////////
 
-app.get("/welcome", function(req, res) {
-    if (req.session.loggedIn) {
-        return res.redirect("/");
-    }
-    res.sendFile(__dirname + "/index.html");
-});
-
 app.post("/register", function(req, res) {
     console.log(req.body);
     if (
@@ -69,10 +66,11 @@ app.post("/register", function(req, res) {
             })
             .then(function(userID) {
                 req.session.userID = userID.rows[0].id;
-                req.session.firstName = req.body.name;
-                req.session.lastName = req.body.lastname;
+                req.session.firstname = req.body.firstname;
+                req.session.lastname = req.body.lastname;
                 req.session.email = req.body.email;
                 req.session.loggedIn = userID.rows[0].id;
+                req.session.imageUrl = null;
 
                 res.json({
                     success: true
@@ -126,6 +124,27 @@ app.post("/login", function(req, res) {
                 });
             });
     }
+});
+
+app.get("/user", function(req, res) {
+    res.json({
+        firstname: req.session.firstname,
+        lastname: req.session.lastname,
+        userID: req.session.userID,
+        imageUrl: req.session.imageUrl
+    });
+});
+
+app.post("/user", function(req, res) {
+    updateProfilePic();
+    res.json({});
+});
+
+app.get("/welcome", function(req, res) {
+    if (req.session.loggedIn) {
+        return res.redirect("/");
+    }
+    res.sendFile(__dirname + "/index.html");
 });
 
 /////////////////////////////////DO NOT TOUCH///////////////////////////////////
