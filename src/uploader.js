@@ -7,12 +7,22 @@ export class Uploader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.submitProfileImage = this.submitProfileImage.bind(this);
     }
 
-    submitProfileImage() {
-        axios.post("/user", {
-            imageUrl: this.state.imageUrl
-        });
+    submitProfileImage(e) {
+        var file = e.target.files[0];
+        var formData = new FormData();
+        formData.append("file", file);
+        axios
+            .post("/picupload", formData)
+            .then(url => {
+                console.log(url.data.imageurl);
+                this.props.updateImage(url.data.imageurl);
+            })
+            .catch(function(err) {
+                console.log("ERROR IN CATCH UPLOADER COMPONENT", err);
+            });
     }
 
     render() {
@@ -20,7 +30,7 @@ export class Uploader extends React.Component {
             <div>
                 <h1> Upload your image here</h1>
                 <input
-                    onClick={this.props.updateImage}
+                    onChange={this.submitProfileImage}
                     name="imageUpload"
                     placeholder="Upload Image"
                     type="file"

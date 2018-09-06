@@ -9,6 +9,33 @@ const {
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
 const csurf = require("csurf");
+const s3 = require("./s3.js");
+const config = require("./config.json");
+
+// BOILERPLATE FOR IMAGE UPLOAD
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+
+let diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+let uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
+
+//END OF BOILERPLATE FOR IMAGE UPLOAD
 
 app.disable("x-powered-by");
 app.use(require("body-parser").json());
@@ -135,9 +162,13 @@ app.get("/user", function(req, res) {
     });
 });
 
-app.post("/user", function(req, res) {
-    updateProfilePic();
-    res.json({});
+app.post("/picupload", uploader.single("file"), s3.upload, function(req, res) {
+    updateProfilePic(req.session.userID, config.s3Url + req.file.filename).then(
+        function(imageUrl) {
+            console.log("IMAGE URL", imageUrl);
+            res.json(imageUrl.rows[0]);
+        }
+    );
 });
 
 app.get("/welcome", function(req, res) {
