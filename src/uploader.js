@@ -20,8 +20,7 @@ export class Uploader extends React.Component {
             <div>
                 <h1> Upload your image here</h1>
                 <input
-                    onClick={props.updateImage}
-                    onClick={submitProfileImage}
+                    onClick={this.props.updateImage}
                     name="imageUpload"
                     placeholder="Upload Image"
                     type="file"
