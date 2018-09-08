@@ -1,20 +1,66 @@
 body {
     margin: 0;
+    font-family: "Roboto", sans-serif;
 }
+
+/*############# UNIVERSAL STYLES ###############  */
+
 .flex-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
+
+.block-input-style {
+    padding: 0 25%;
+}
+
+.block-input-style input {
+    font-family: "Roboto Mono", monospace;
+    font-size: 1.4rem;
+    color: gray;
+    height: 35px;
+    width: 300px;
+    margin-bottom: 4%;
+    margin-right: 2%;
+}
+/*############# UNIVERSAL STYLES END ###############  */
 
 #welcome-wrap {
 }
 
 #welcome-wrap h1 {
-    font-size: 8rem;
+    font-size: 15rem;
     color: tomato;
-    font-family: "Helvetica Neue", serif;
+    -webkit-text-stroke: 1px tomato;
+    -webkit-text-fill-color: transparent;
+    font-family: "Roboto Mono", monospace;
+    font-weight: 700;
+    margin: 0 auto;
 }
+
+#welcome-wrap h1:hover {
+    color: tomato;
+    -webkit-text-stroke: 0px tomato;
+    -webkit-text-fill-color: tomato;
+    transform: rotate(180deg);
+    cursor: none;
+}
+
+/* .registration-input {
+    padding: 0 25%;
+}
+
+.registration-input input {
+    font-family: "Roboto Mono", monospace;
+    font-size: 1.4rem;
+    color: gray;
+    height: 35px;
+    width: 300px;
+    margin-bottom: 4%;
+    margin-right: 2%;
+} */
 
 img {
     height: 200px;

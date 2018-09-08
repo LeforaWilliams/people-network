@@ -4,7 +4,8 @@ const compression = require("compression");
 const {
     registerUser,
     loginUser,
-    updateProfilePic
+    updateProfilePic,
+    updateUserBio
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -98,6 +99,7 @@ app.post("/register", function(req, res) {
                 req.session.email = req.body.email;
                 req.session.loggedIn = userID.rows[0].id;
                 req.session.imageUrl = null;
+                req.session.bio = null;
 
                 res.json({
                     success: true
@@ -158,18 +160,34 @@ app.get("/user", function(req, res) {
         firstname: req.session.firstname,
         lastname: req.session.lastname,
         userID: req.session.userID,
-        imageUrl: req.session.imageUrl
+        imageUrl: req.session.imageUrl,
+        bio: req.session.bio
     });
 });
 
 app.post("/picupload", uploader.single("file"), s3.upload, function(req, res) {
-    updateProfilePic(req.session.userID, config.s3Url + req.file.filename).then(
-        function(imageUrl) {
+    updateProfilePic(req.session.userID, config.s3Url + req.file.filename)
+        .then(function(imageUrl) {
             console.log("IMAGE URL", imageUrl.rows[0].imageurl);
             req.session.imageUrl = imageUrl.rows[0].imageurl;
-            res.json(imageUrl.rows[0]);
-        }
-    );
+            res.json({ url: imageUrl.rows[0].imageurl });
+        })
+        .catch(err => {
+            console.log("ERROR IN PICUPLOAD CATCH ROUTE", err);
+        });
+});
+
+app.post("/bioupload", function(req, res) {
+    updateUserBio(req.session.userID, req.body.bio)
+        .then(function(newBio) {
+            console.log(
+                "LOGGIN WHAT I GET BACK FROM DATABASE IN BIOUPLOAD",
+                newBio
+            );
+        })
+        .catch(function(err) {
+            console.log("ERROR IN BIOUPLOAD ROUTE CATCH", err);
+        });
 });
 
 app.get("/welcome", function(req, res) {
@@ -179,9 +197,7 @@ app.get("/welcome", function(req, res) {
     res.sendFile(__dirname + "/index.html");
 });
 
-/////////////////////////////////DO NOT TOUCH///////////////////////////////////
-/////////////////////////////////DO NOT TOUCH///////////////////////////////////
-/////////////////////////////////DO NOT TOUCH///////////////////////////////////
+/////////////////////////////////DO NOT TOUCH/////////////////////////////////// /////////////////////////////////DO NOT TOUCH/////////////////////////////////// /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 app.get("*", function(req, res) {
     if (!req.session.loggedIn) {
         console.log("IN STAR ROUTE", req.url);

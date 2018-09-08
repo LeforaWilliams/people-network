@@ -11,7 +11,7 @@ export class ProfilePic extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="profile-pic-wrap flex-container">
                 <h1>Welcome {this.props.firstname}</h1>
                 <img
                     onClick={this.props.uploaderModalFunction}

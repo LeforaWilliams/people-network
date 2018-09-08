@@ -6,6 +6,7 @@ CREATE TABLE users (
     surname VARCHAR(168) NOT NULL,
     email VARCHAR(168) NOT NULL UNIQUE,
     password VARCHAR(168) NOT NULL,
-    imageUrl TEXT
+    imageUrl TEXT,
+    bio VARCHAR(1608)
 
 );

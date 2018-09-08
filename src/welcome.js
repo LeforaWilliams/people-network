@@ -11,7 +11,12 @@ import { Login } from "./login.js";
 export function Welcome() {
     return (
         <div id="welcome-wrap" className="flex-container">
-            <h1>THIS IS THE SOCIAL NETWORK</h1>
+            <p>
+                Out there somewhere are the kind of people who do not accept the
+                premature autopsy of a noble art form. These are the ones{" "}
+            </p>
+            <h1 className="alien-script">37d03d</h1>
+
             <HashRouter>
                 <div>
                     <Route exact path="/" component={Registration} />

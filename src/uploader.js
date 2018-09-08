@@ -17,8 +17,8 @@ export class Uploader extends React.Component {
         axios
             .post("/picupload", formData)
             .then(url => {
-                console.log(url.data.imageurl);
-                this.props.updateImage(url.data.imageurl);
+                console.log(url.data.url);
+                this.props.updateImage(url.data.url);
             })
             .catch(function(err) {
                 console.log("ERROR IN CATCH UPLOADER COMPONENT", err);

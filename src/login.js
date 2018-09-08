@@ -42,21 +42,23 @@ export class Login extends React.Component {
                         Something went wrong. Please try again!
                     </div>
                 )}
-                <input
-                    name="email"
-                    placeholder="Name"
-                    onChange={this.handleChange}
-                />
-                <input
-                    name="password"
-                    placeholder="Password"
-                    onChange={this.handleChange}
-                />
-                <button onClick={this.submit}>Log in </button>
-                <p>
-                    <Link to="/">Register here</Link> if you dont have an
-                    account yet
-                </p>
+                <div className="block-input-style">
+                    <input
+                        name="email"
+                        placeholder="Name"
+                        onChange={this.handleChange}
+                    />
+                    <input
+                        name="password"
+                        placeholder="Password"
+                        onChange={this.handleChange}
+                    />
+                    <button onClick={this.submit}>Log in </button>
+                    <p>
+                        <Link to="/">Register here</Link> if you dont have an
+                        account yet
+                    </p>
+                </div>
             </div>
         );
     }
