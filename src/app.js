@@ -22,7 +22,6 @@ export class App extends React.Component {
 
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
-            console.log(data);
             this.setState(data);
         });
     }
@@ -47,7 +46,7 @@ export class App extends React.Component {
     }
 
     updateBio(newBio) {
-        bio: newBio;
+        this.setState({ bio: newBio });
     }
 
     render() {
@@ -95,6 +94,7 @@ export class App extends React.Component {
                                 bio={bio}
                                 toggleBio={this.toggleBio}
                                 showBio={showBio}
+                                updateBio={this.updateBio}
                             />
                         )}
                     />

@@ -168,7 +168,6 @@ app.get("/user", function(req, res) {
 app.post("/picupload", uploader.single("file"), s3.upload, function(req, res) {
     updateProfilePic(req.session.userID, config.s3Url + req.file.filename)
         .then(function(imageUrl) {
-            console.log("IMAGE URL", imageUrl.rows[0].imageurl);
             req.session.imageUrl = imageUrl.rows[0].imageurl;
             res.json({ url: imageUrl.rows[0].imageurl });
         })
@@ -177,13 +176,11 @@ app.post("/picupload", uploader.single("file"), s3.upload, function(req, res) {
         });
 });
 
-app.post("/bioupload", function(req, res) {
+app.post("/bioupload", (req, res) => {
+    console.log("THIS IS THE NEW BIO THAT GOES INTO THE DB", req.body.bio);
     updateUserBio(req.session.userID, req.body.bio)
-        .then(function(newBio) {
-            console.log(
-                "LOGGIN WHAT I GET BACK FROM DATABASE IN BIOUPLOAD",
-                newBio
-            );
+        .then(newBio => {
+            res.json({ newBio: newBio.rows[0].bio });
         })
         .catch(function(err) {
             console.log("ERROR IN BIOUPLOAD ROUTE CATCH", err);

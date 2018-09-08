@@ -18,18 +18,35 @@ export class Profile extends React.Component {
     }
 
     setBio(e) {
-        console.log("IN SET BIO", e);
+        console.log("IN SET BIO", e.target.value);
+        {
+            /*when logging e.target.value on keydown, the log displays a on letter delay. Why?*/
+        }
+        if (e.which === 13) {
+            axios
+                .post("/bioupload", { bio: e.target.value })
+                .then(newBio => {
+                    this.props.updateBio(newBio.data.newBio);
+                    this.props.toggleBio();
+                })
+                .catch(err => {
+                    console.log(
+                        "ERROR IN BIOUPLOAD POST IN PROFILE COMPONENT",
+                        err
+                    );
+                });
+        }
     }
 
     render() {
         const {
-            setBio,
             toggleBio,
             showBio,
             bio,
             firstname,
             lastname,
-            imageUrl
+            imageUrl,
+            updateBio
         } = this.props;
 
         return (
@@ -40,11 +57,7 @@ export class Profile extends React.Component {
                     </h1>
 
                     {showBio ? (
-                        <textarea
-                            onChange={setBio}
-                            onKeyDown={setBio}
-                            defaultValue={bio}
-                        />
+                        <textarea onKeyDown={this.setBio} defaultValue={bio} />
                     ) : (
                         <p onClick={toggleBio}>Add a bio</p>
                     )}
