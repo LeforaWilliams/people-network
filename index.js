@@ -177,9 +177,9 @@ app.post("/picupload", uploader.single("file"), s3.upload, function(req, res) {
 });
 
 app.post("/bioupload", (req, res) => {
-    console.log("THIS IS THE NEW BIO THAT GOES INTO THE DB", req.body.bio);
     updateUserBio(req.session.userID, req.body.bio)
         .then(newBio => {
+            req.session.bio = newBio.rows[0].bio;
             res.json({ newBio: newBio.rows[0].bio });
         })
         .catch(function(err) {

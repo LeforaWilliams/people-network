@@ -25,6 +25,12 @@ body {
     margin-bottom: 4%;
     margin-right: 2%;
 }
+
+img {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+}
 /*############# UNIVERSAL STYLES END ###############  */
 
 #welcome-wrap {
@@ -48,22 +54,14 @@ body {
     cursor: none;
 }
 
-/* .registration-input {
-    padding: 0 25%;
+.profile-pic-wrap {
+    justify-content: flex-end;
+    padding-right: 2%;
+    padding-top: 1%;
 }
 
-.registration-input input {
-    font-family: "Roboto Mono", monospace;
-    font-size: 1.4rem;
-    color: gray;
-    height: 35px;
-    width: 300px;
-    margin-bottom: 4%;
-    margin-right: 2%;
-} */
-
-img {
-    height: 200px;
-    width: 200px;
-    object-fit: cover;
+.profile-pic-wrap img {
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
 }

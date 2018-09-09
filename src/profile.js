@@ -18,9 +18,10 @@ export class Profile extends React.Component {
     }
 
     setBio(e) {
-        console.log("IN SET BIO", e.target.value);
         {
-            /*when logging e.target.value on keydown, the log displays a on letter delay. Why?*/
+            /*
+            console.log("IN SET BIO", e.target.value);
+            when logging e.target.value on keydown, the log displays a on letter delay. Why?*/
         }
         if (e.which === 13) {
             axios
@@ -55,11 +56,24 @@ export class Profile extends React.Component {
                     <h1>
                         {firstname} {lastname}
                     </h1>
-
-                    {showBio ? (
-                        <textarea onKeyDown={this.setBio} defaultValue={bio} />
+                    {bio ? (
+                        <div className="bio-content-wrap">
+                            <p className="bio-content"> {bio} </p>
+                            <p className="edit-bio" onClick={toggleBio}>
+                                {" "}
+                                Edit bio
+                            </p>
+                        </div>
                     ) : (
                         <p onClick={toggleBio}>Add a bio</p>
+                    )}
+
+                    {showBio && (
+                        <textarea
+                            className="bio-text-box"
+                            onKeyDown={this.setBio}
+                            defaultValue={bio}
+                        />
                     )}
 
                     <div>
