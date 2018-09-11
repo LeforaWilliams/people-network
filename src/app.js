@@ -6,6 +6,7 @@ import { ProfilePic } from "./pic.js";
 import { Uploader } from "./uploader.js";
 import { Profile } from "./profile.js";
 import { BrowserRouter, Route } from "react-router-dom";
+import OtherProfile from "./OtherProfile.js";
 
 //Import all the components that you want to see in app
 
@@ -22,6 +23,7 @@ export class App extends React.Component {
 
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
+            // console.log("USER DATA", data);
             this.setState(data);
         });
     }
@@ -84,20 +86,24 @@ export class App extends React.Component {
                 )}
 
                 <BrowserRouter>
-                    <Route
-                        path="/"
-                        render={() => (
-                            <Profile
-                                firstname={firstname}
-                                lastname={lastname}
-                                imageUrl={imageUrl}
-                                bio={bio}
-                                toggleBio={this.toggleBio}
-                                showBio={showBio}
-                                updateBio={this.updateBio}
-                            />
-                        )}
-                    />
+                    <div>
+                        <Route
+                            exact
+                            path="/"
+                            render={() => (
+                                <Profile
+                                    firstname={firstname}
+                                    lastname={lastname}
+                                    imageUrl={imageUrl}
+                                    bio={bio}
+                                    toggleBio={this.toggleBio}
+                                    showBio={showBio}
+                                    updateBio={this.updateBio}
+                                />
+                            )}
+                        />
+                        <Route path="/user/:userId" component={OtherProfile} />
+                    </div>
                 </BrowserRouter>
             </div>
         );

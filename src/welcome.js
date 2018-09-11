@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Registration } from "./registration.js";
 import { HashRouter, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Homepage } from "./homepage.js";
 import { Login } from "./login.js";
 // Login component will be the wrap for all pages when we are logged in
 //progile pic component , should also have a pic for when they don't have one

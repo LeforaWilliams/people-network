@@ -45,11 +45,12 @@ export class Login extends React.Component {
                 <div className="block-input-style">
                     <input
                         name="email"
-                        placeholder="Name"
+                        placeholder="Email"
                         onChange={this.handleChange}
                     />
                     <input
                         name="password"
+                        type="password"
                         placeholder="Password"
                         onChange={this.handleChange}
                     />

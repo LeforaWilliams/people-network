@@ -52,10 +52,13 @@ export class Profile extends React.Component {
 
         return (
             <div>
-                <div className="bio-section">
+                <div className="bio-section flex-container">
                     <h1>
                         {firstname} {lastname}
                     </h1>
+                    <div className="profile-image flex-container">
+                        <img src={imageUrl} />
+                    </div>
                     {bio ? (
                         <div className="bio-content-wrap">
                             <p className="bio-content"> {bio} </p>
@@ -70,15 +73,11 @@ export class Profile extends React.Component {
 
                     {showBio && (
                         <textarea
-                            className="bio-text-box"
+                            className="bio-text-box "
                             onKeyDown={this.setBio}
                             defaultValue={bio}
                         />
                     )}
-
-                    <div>
-                        <img src={imageUrl} />
-                    </div>
                 </div>
             </div>
         );

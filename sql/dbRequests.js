@@ -44,3 +44,36 @@ module.exports.updateUserBio = function(userID, bio) {
         [userID, bio || null]
     );
 };
+
+module.exports.getOtherUserInfo = function(userID) {
+    return db.query(`SELECT * FROM users WHERE id= $1`, [userID]);
+};
+module.exports.setFriendshipStatus = function(
+    otherUserID,
+    currentUserID,
+    status
+) {
+    return db.query(
+        `INSERT INTO friendships (receiver_id, sender_id, status) VALUES($1, $2, $3) RETURNING status`,
+        [otherUserID, currentUserID, status]
+    );
+};
+
+module.exports.getFriendshipStatus = function(otherUserID, currentUserID) {
+    return db.query(
+        `SELECT receiver_id, sender_id, status
+    FROM friendships
+    WHERE (receiver_id = $1 AND sender_id = $2)
+    OR (receiver_id= $2 AND sender_id= $1) `,
+        [otherUserID, currentUserID]
+    );
+};
+
+module.exports.acceptRequest = function(otherUserID, currentUserID, status) {
+    return db.query(
+        `UPDATE friendships
+        SET status= $3
+        WHERE receiver_id=$1 AND sender_id= $2`,
+        [otherUserID, currentUserID, status]
+    );
+};

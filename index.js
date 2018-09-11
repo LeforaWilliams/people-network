@@ -5,7 +5,11 @@ const {
     registerUser,
     loginUser,
     updateProfilePic,
-    updateUserBio
+    updateUserBio,
+    getOtherUserInfo,
+    getFriendshipStatus,
+    setFriendshipStatus,
+    acceptRequest
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -134,8 +138,15 @@ app.post("/login", function(req, res) {
                     userInfo.rows[0].password
                 ).then(function(checkPassRes) {
                     if (checkPassRes) {
+                        console.log("USER INFO AFTER LOGIN", userInfo.rows[0]);
                         req.session.userID = userInfo.rows[0].id;
                         req.session.loggedIn = userInfo.rows[0].id;
+                        req.session.firstname = userInfo.rows[0].name;
+                        req.session.lastname = userInfo.rows[0].surname;
+                        req.session.email = userInfo.rows[0].email;
+                        req.session.loggedIn = userInfo.rows[0].id;
+                        req.session.imageUrl = userInfo.rows[0].imageUrl;
+                        req.session.bio = userInfo.rows[0].bio;
                         res.json({
                             success: true
                         });
@@ -186,6 +197,112 @@ app.post("/bioupload", (req, res) => {
             console.log("ERROR IN BIOUPLOAD ROUTE CATCH", err);
         });
 });
+
+app.get("/get-user/:userId", (req, res) => {
+    console.log();
+    if (req.session.userID == req.params.userId) {
+        return res.json({
+            self: true
+        });
+    }
+    getOtherUserInfo(req.params.userId)
+        .then(otherUserInfo => {
+            res.json({
+                firstname: otherUserInfo.rows[0].name,
+                lastname: otherUserInfo.rows[0].surname,
+                profilepic: otherUserInfo.rows[0].imageurl
+            });
+        })
+        .catch(err => {
+            console.log("ERROR IN GET OTHER USER ID ROUTE-SERVER", err);
+        });
+});
+
+////////////////FRIENDSHIPS//////////////////////////////
+//Initially Check the status without anyone clicking any buttons
+
+//When a user makes a request: check what the status is  and set the button accordingly
+
+//rewrite if statents into object and loop through
+
+//>>>> how do you know how made the request? (sender_id always makes the req ie. from the table)
+
+//these routes are for the display of the button
+app.get("/check-status", (req, res) => {
+    getFriendshipStatus(req.query.otherUserID, req.session.userID)
+        .then(status => {
+            if (!status) {
+                return app.post("/check-status", (req, res) => {
+                    console.log("THESE TWO HAVET CONNECTED YET", status);
+                    res.json({
+                        status: false,
+                        sender: req.session.userID,
+                        receiver: req.body.userID
+                    });
+                });
+            }
+
+            if (status === "pending") {
+                return app.post("/check-status", (req, res) => {
+                    console.log("THESE TWO ARE PENDING", status);
+                    res.json({
+                        status: "pending",
+                        sender: req.session.userID,
+                        receiver: req.body.userID
+                    });
+                });
+            }
+            if (status === "friends") {
+                return app.post("/check-stauts", (req, res) => {
+                    console.log("THESE TWO ARE FRIENDS", status);
+                    res.json({
+                        status: "freinds",
+                        sender: req.session.userID,
+                        receiver: req.body.userID
+                    });
+                });
+            }
+        })
+        .catch(err => {
+            console.log("ERROR IN CHECK STATUS ROUTE-SERVER", err);
+            res.setStatus(500);
+        });
+});
+
+//Make a freind Request
+app.post("/make-request", (req, res) => {
+    console.log("REQUEST HAS BEEN MADE");
+    setFriendshipStatus(req.body.userID, req.session.userID, "pending")
+        .then(() => {
+            res.json({
+                status: "pending",
+                sender: req.session.userID,
+                receiver: req.body.userID
+            });
+        })
+        .catch(err => {
+            console.log("ERROR IN MAKE REQUEST ROUTE-SERVER", err);
+            res.setStatus(500);
+        });
+});
+
+//Accept friend request
+app.post("/accept-request", (req, res) => {
+    acceptRequest(req.body.userID, req.session.userID, "friends")
+        .then(() => {
+            res.json({
+                status: "friends",
+                sender: req.session.userID,
+                receiver: req.body.userID
+            });
+        })
+        .catch(err => {
+            console.log("ERROR IN ACCEPT REQUEST ROUTE-SERVER", err);
+            res.setStatus(500);
+        });
+});
+
+////////////////FRIENDSHIPS//////////////////////////////
 
 app.get("/welcome", function(req, res) {
     if (req.session.loggedIn) {

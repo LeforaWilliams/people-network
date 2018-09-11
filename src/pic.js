@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import axios from "./axios.js";
 import { Link } from "react-router-dom";
 

@@ -65,3 +65,18 @@ img {
     width: 90px;
     border-radius: 50%;
 }
+
+.profile-image {
+}
+
+.profile-image img {
+    height: 400px;
+    width: 400px;
+}
+
+.other-profile-wrap h1 {
+    color: tomato;
+    font-size: 15rem;
+    font-family: "Roboto Mono";
+    margin: 0 auto;
+}
