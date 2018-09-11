@@ -11,8 +11,9 @@ export class FriendButton extends React.Component {
     }
 
     componentDidMount() {
+        console.log("IN COMPONENT DID MOUNT STEP 1");
         axios
-            .get("/check-status", {
+            .get("/check", {
                 params: { otherUserID: this.props.otherUserID }
             })
             .then(data => {

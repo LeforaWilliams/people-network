@@ -228,46 +228,47 @@ app.get("/get-user/:userId", (req, res) => {
 //>>>> how do you know how made the request? (sender_id always makes the req ie. from the table)
 
 //these routes are for the display of the button
-app.get("/check-status", (req, res) => {
-    getFriendshipStatus(req.query.otherUserID, req.session.userID)
-        .then(status => {
-            if (!status) {
-                return app.post("/check-status", (req, res) => {
-                    console.log("THESE TWO HAVET CONNECTED YET", status);
-                    res.json({
-                        status: false,
-                        sender: req.session.userID,
-                        receiver: req.body.userID
-                    });
-                });
-            }
-
-            if (status === "pending") {
-                return app.post("/check-status", (req, res) => {
-                    console.log("THESE TWO ARE PENDING", status);
-                    res.json({
-                        status: "pending",
-                        sender: req.session.userID,
-                        receiver: req.body.userID
-                    });
-                });
-            }
-            if (status === "friends") {
-                return app.post("/check-stauts", (req, res) => {
-                    console.log("THESE TWO ARE FRIENDS", status);
-                    res.json({
-                        status: "freinds",
-                        sender: req.session.userID,
-                        receiver: req.body.userID
-                    });
-                });
-            }
-        })
-        .catch(err => {
-            console.log("ERROR IN CHECK STATUS ROUTE-SERVER", err);
-            res.setStatus(500);
-        });
+app.get("/check", (req, res) => {
+    console.log("ABOUT TO CHECK FRIENDHIP STATUS");
+    getFriendshipStatus(req.query.otherUserID, req.session.userID).then(
+        status => {
+            console.log("CHECKING STATUS FROM DB", status.rows[0].status);
+            // if (!status) {
+            res.json({
+                status: status.rows[0].status,
+                sender: status.rows[0].sender_id, //return from DB
+                receiver: status.rows[0].receiver_id //RETURN FROM DB
+            });
+        }
+    );
 });
+
+//     if (status === "pending") {
+//         return app.post("/check", (req, res) => {
+//             console.log("THESE TWO ARE PENDING", status);
+//             res.json({
+//                 status: "pending",
+//                 sender: req.session.userID,
+//                 receiver: req.body.userID
+//             });
+//         });
+//     }
+//     if (status === "friends") {
+//         return app.post("/check", (req, res) => {
+//             console.log("THESE TWO ARE FRIENDS", status);
+//             res.json({
+//                 status: "freinds",
+//                 sender: req.session.userID,
+//                 receiver: req.body.userID
+//             });
+//         });
+//     }
+// })
+// .catch(err => {
+//     console.log("ERROR IN CHECK STATUS ROUTE-SERVER", err);
+//     res.setStatus(500);
+// });
+// });
 
 //Make a freind Request
 app.post("/make-request", (req, res) => {
