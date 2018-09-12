@@ -9,7 +9,8 @@ const {
     getOtherUserInfo,
     getFriendshipStatus,
     setFriendshipStatus,
-    acceptRequest
+    acceptRequest,
+    endFriendship
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -229,50 +230,19 @@ app.get("/get-user/:userId", (req, res) => {
 
 //these routes are for the display of the button
 app.get("/check", (req, res) => {
-    console.log("ABOUT TO CHECK FRIENDHIP STATUS");
     getFriendshipStatus(req.query.otherUserID, req.session.userID).then(
         status => {
-            console.log("CHECKING STATUS FROM DB", status.rows[0].status);
-            // if (!status) {
             res.json({
                 status: status.rows[0].status,
-                sender: status.rows[0].sender_id, //return from DB
-                receiver: status.rows[0].receiver_id //RETURN FROM DB
+                sender: status.rows[0].sender_id,
+                receiver: status.rows[0].receiver_id
             });
         }
     );
 });
 
-//     if (status === "pending") {
-//         return app.post("/check", (req, res) => {
-//             console.log("THESE TWO ARE PENDING", status);
-//             res.json({
-//                 status: "pending",
-//                 sender: req.session.userID,
-//                 receiver: req.body.userID
-//             });
-//         });
-//     }
-//     if (status === "friends") {
-//         return app.post("/check", (req, res) => {
-//             console.log("THESE TWO ARE FRIENDS", status);
-//             res.json({
-//                 status: "freinds",
-//                 sender: req.session.userID,
-//                 receiver: req.body.userID
-//             });
-//         });
-//     }
-// })
-// .catch(err => {
-//     console.log("ERROR IN CHECK STATUS ROUTE-SERVER", err);
-//     res.setStatus(500);
-// });
-// });
-
 //Make a freind Request
 app.post("/make-request", (req, res) => {
-    console.log("REQUEST HAS BEEN MADE");
     setFriendshipStatus(req.body.userID, req.session.userID, "pending")
         .then(() => {
             res.json({
@@ -292,9 +262,7 @@ app.post("/accept-request", (req, res) => {
     acceptRequest(req.body.userID, req.session.userID, "friends")
         .then(() => {
             res.json({
-                status: "friends",
-                sender: req.session.userID,
-                receiver: req.body.userID
+                status: "friends"
             });
         })
         .catch(err => {
@@ -303,6 +271,13 @@ app.post("/accept-request", (req, res) => {
         });
 });
 
+app.post("/delete-friendship", (req, res) => {
+    endFriendship(req.body.userID, req.session.userID).then(() => {
+        res.json({
+            status: false
+        });
+    });
+});
 ////////////////FRIENDSHIPS//////////////////////////////
 
 app.get("/welcome", function(req, res) {

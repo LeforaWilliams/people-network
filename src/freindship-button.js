@@ -11,17 +11,15 @@ export class FriendButton extends React.Component {
     }
 
     componentDidMount() {
-        console.log("IN COMPONENT DID MOUNT STEP 1");
         axios
             .get("/check", {
                 params: { otherUserID: this.props.otherUserID }
             })
             .then(data => {
-                console.log("IN COMPONENET DID MOUNT", data);
                 this.setState({
-                    status: data.status,
-                    receiver: data.receiver,
-                    sender: data.sender
+                    status: data.data.status,
+                    receiver: data.data.receiver,
+                    sender: data.data.sender
                 });
             });
     }
@@ -38,9 +36,9 @@ export class FriendButton extends React.Component {
                 .post("/make-request", { userID: this.props.otherUserID })
                 .then(data => {
                     this.setState({
-                        status: data.status,
-                        receiver: data.receiver,
-                        sender: data.sender
+                        status: data.data.status,
+                        receiver: data.data.receiver,
+                        sender: data.data.sender
                     });
                 })
                 .catch(err => {
@@ -49,31 +47,39 @@ export class FriendButton extends React.Component {
         } else if (this.state.status === "pending") {
             axios
                 .post("/accept-request", { userID: this.props.otherUserID })
-                .then(() => {
+                .then(data => {
                     this.setState({
-                        status: "friends",
-                        receiver: data.receiver,
-                        sender: data.sender
+                        status: data.data.status
                     });
+                });
+        } else if (this.state.status === "friends") {
+            axios
+                .post("/delete-friendship", { userID: this.props.otherUserID })
+                .then(data => {
+                    this.setState({
+                        status: data.data.status
+                    });
+                    console.log(
+                        "LOGGING STATUS AFTER DELETED",
+                        this.state.status
+                    );
                 });
         }
     }
 
     render() {
         let buttonText;
+        console.log("CURRENT STATUS", this.state.status);
         if (!this.state.status) {
             buttonText = "Make Request";
-        } else if ((this.state.status = "pending")) {
-            if (
-                this.state.status == "pending" &&
-                this.props.otherUserID == this.state.receiver
-            ) {
+        } else if (this.state.status == "pending") {
+            if (this.props.otherUserID == this.state.receiver) {
                 buttonText = "Pending(later cancel req)";
             } else {
                 buttonText = "Accept Request";
             }
         } else if (this.state.status == "friends") {
-            buttonText = "Friends";
+            buttonText = "Delete Friendship";
         }
 
         return (

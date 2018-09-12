@@ -73,7 +73,16 @@ module.exports.acceptRequest = function(otherUserID, currentUserID, status) {
     return db.query(
         `UPDATE friendships
         SET status= $3
-        WHERE receiver_id=$1 AND sender_id= $2`,
+        WHERE receiver_id=$2 AND sender_id= $1`,
         [otherUserID, currentUserID, status]
+    );
+};
+
+//need query to delete freindship and one to cancel request
+
+module.exports.endFriendship = function(otherUserID, currentUserID) {
+    return db.query(
+        `DELETE FROM friendships WHERE (receiver_id = $1 AND sender_id = $2) OR (sender_id = $1 and receiver_id = $2)`,
+        [otherUserID, currentUserID]
     );
 };
