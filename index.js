@@ -10,7 +10,8 @@ const {
     getFriendshipStatus,
     setFriendshipStatus,
     acceptRequest,
-    endFriendship
+    endFriendship,
+    getRelationships
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -220,14 +221,15 @@ app.get("/get-user/:userId", (req, res) => {
 });
 
 ////////////////FRIENDSHIPS//////////////////////////////
-//Initially Check the status without anyone clicking any buttons
 
-//When a user makes a request: check what the status is  and set the button accordingly
-
-//rewrite if statents into object and loop through
-
-//>>>> how do you know how made the request? (sender_id always makes the req ie. from the table)
-
+//get all potential and current freindships
+app.get("/relations", (req, res) => {
+    getRelationships(req.session.userID).then(rel => {
+        res.json({
+            rel
+        });
+    });
+});
 //these routes are for the display of the button
 app.get("/check", (req, res) => {
     getFriendshipStatus(req.query.otherUserID, req.session.userID).then(

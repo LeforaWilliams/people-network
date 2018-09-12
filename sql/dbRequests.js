@@ -86,3 +86,12 @@ module.exports.endFriendship = function(otherUserID, currentUserID) {
         [otherUserID, currentUserID]
     );
 };
+
+module.exports.getRelationships = function(currentUserID) {
+    return db.query(`SELECT users.id, name, surname, imageUrl, status
+    FROM friendships
+    JOIN users
+    ON (status = 'pending' AND receiver_id = $1 AND sender_id = users.id)
+    OR (status = 'friends' AND receiver_id = $1 AND sender_id = users.id)
+    OR (status = 'friends' AND receiver_id = $1 AND sender_id = users.id)`);
+};
