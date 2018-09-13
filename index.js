@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
+const server = require("http").Server(app); //wrapping our express server in a node https server becuase soket io only works with a node server
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 const {
     registerUser,
     loginUser,
@@ -323,6 +325,6 @@ app.get("*", function(req, res) {
 /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening.");
 });
