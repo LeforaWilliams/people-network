@@ -24,7 +24,7 @@ export class Login extends React.Component {
             })
             .then(({ data }) => {
                 if (data.success) {
-                    location.replace("/homepage");
+                    location.replace("/");
                 } else {
                     this.setState({
                         error: true
