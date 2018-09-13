@@ -49,6 +49,7 @@ export class Profile extends React.Component {
             imageUrl,
             updateBio
         } = this.props;
+        console.log("IN PTOFILE ", firstname);
 
         return (
             <div>

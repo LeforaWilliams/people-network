@@ -147,7 +147,7 @@ app.post("/login", function(req, res) {
                         req.session.lastname = userInfo.rows[0].surname;
                         req.session.email = userInfo.rows[0].email;
                         req.session.loggedIn = userInfo.rows[0].id;
-                        req.session.imageUrl = userInfo.rows[0].imageUrl;
+                        req.session.imageUrl = userInfo.rows[0].imageurl;
                         req.session.bio = userInfo.rows[0].bio;
                         res.json({
                             success: true
@@ -225,9 +225,8 @@ app.get("/get-user/:userId", (req, res) => {
 //get all potential and current freindships
 app.get("/relations", (req, res) => {
     getRelationships(req.session.userID).then(rel => {
-        res.json({
-            rel
-        });
+        console.log("IN RELATIONS DB RESPONSE", rel.rows);
+        res.json(rel.rows);
     });
 });
 //these routes are for the display of the button
@@ -273,6 +272,20 @@ app.post("/accept-request", (req, res) => {
         });
 });
 
+//Accept friend request
+// app.post("/accept-request/:id", (req, res) => {
+//     acceptRequest(req.params.userID, req.session.userID, "friends")
+//         .then(() => {
+//             res.json({
+//                 status: "friends"
+//             });
+//         })
+//         .catch(err => {
+//             console.log("ERROR IN ACCEPT REQUEST ROUTE-SERVER", err);
+//             res.setStatus(500);
+//         });
+// });
+
 app.post("/delete-friendship", (req, res) => {
     endFriendship(req.body.userID, req.session.userID).then(() => {
         res.json({
@@ -280,7 +293,16 @@ app.post("/delete-friendship", (req, res) => {
         });
     });
 });
-////////////////FRIENDSHIPS//////////////////////////////
+
+// app.post("/delete-friendship/:id", (req, res) => {
+//     endFriendship(req.params.userID, req.session.userID).then(() => {
+//         res.json({
+//             status: false
+//         });
+//     });
+// });
+
+////////////////FRIENDSHIPS END//////////////////////////////
 
 app.get("/welcome", function(req, res) {
     if (req.session.loggedIn) {
