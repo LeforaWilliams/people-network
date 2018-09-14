@@ -99,9 +99,16 @@ module.exports.getRelationships = function(currentUserID) {
     );
 };
 
-module.exports.getUsersByIds = function getUsersByIds(arrayOfIds) {
+module.exports.getUsersByIds = function(arrayOfIds) {
     return db.query(
         `SELECT id, name , surname, imageUrl FROM users WHERE id = ANY($1)`,
         [arrayOfIds]
+    );
+};
+
+module.exports.updateActiveUsers = function(userID) {
+    return db.query(
+        `SELECT id, name, surname, imageUrl FROM users WHERE id= $1`,
+        [userID]
     );
 };

@@ -31,3 +31,10 @@ export function getOnlineUsers(users) {
         users
     };
 }
+
+export function newUserOnline(newUser) {
+    return {
+        type: "NEW_USER_ONLINE",
+        newUser
+    };
+}

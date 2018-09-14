@@ -12,6 +12,11 @@ export function getSocket(store) {
         socket.on("onlineUsers", data => {
             store.dispatch(getOnlineUsers(data));
         });
+
+        socket.on("userJoined", data => {
+            console.log("a new user has just logged in", data);
+            store.dispatch(newUserOnline(data));
+        });
     }
 
     return socket;

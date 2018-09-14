@@ -14,7 +14,8 @@ const {
     acceptRequest,
     endFriendship,
     getRelationships,
-    getUsersByIds
+    getUsersByIds,
+    updateActiveUsers
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -283,20 +284,6 @@ app.post("/accept-request", (req, res) => {
         });
 });
 
-//Accept friend request
-// app.post("/accept-request/:id", (req, res) => {
-//     acceptRequest(req.params.userID, req.session.userID, "friends")
-//         .then(() => {
-//             res.json({
-//                 status: "friends"
-//             });
-//         })
-//         .catch(err => {
-//             console.log("ERROR IN ACCEPT REQUEST ROUTE-SERVER", err);
-//             res.setStatus(500);
-//         });
-// });
-
 app.post("/delete-friendship", (req, res) => {
     endFriendship(req.body.userID, req.session.userID).then(() => {
         res.json({
@@ -304,14 +291,6 @@ app.post("/delete-friendship", (req, res) => {
         });
     });
 });
-
-// app.post("/delete-friendship/:id", (req, res) => {
-//     endFriendship(req.params.userID, req.session.userID).then(() => {
-//         res.json({
-//             status: false
-//         });
-//     });
-// });
 
 ////////////////FRIENDSHIPS END//////////////////////////////
 
@@ -362,11 +341,19 @@ io.on("connection", function(socket) {
         socket.emit("onlineUsers", userIds.rows);
     });
 
-    //this will only be emitted to the person that just logged in but not ht others taht are already online,
+    //this will only be emitted to the person that just logged in but not ht others taht are already online (above code)
     //need to take user id of the person that just logged in and give it to the rest of the people that are online, first we need to get all the info of ther perosn that just logged in
 
     //create database query
-    // socket.brodcast("userJoined", payload);
+    updateActiveUsers(socket.request.session.userID).then(newUser => {
+        socket.broadcast.emit("userJoined", {
+            newUserInfo: newUser.rows
+        });
+        // let newUser = userIds.filter(id => {
+        //     return id == socket.request.session.userID;
+        // });
+    });
+    // });
 
     // when user loggs out
     socket.on("disconnect", function() {

@@ -39,6 +39,12 @@ export default function(state = {}, action) {
             users: action.users
         };
     }
+    if (action.type == "NEW_USER_ONLINE") {
+        state = {
+            ...state,
+            newUser: action.newUser
+        };
+    }
 
     return state;
 }
