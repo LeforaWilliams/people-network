@@ -336,6 +336,7 @@ io.on("connection", function(socket) {
     //this takes the values of the online users object to pass it to the DB to get all the information of the users with the corresponding ids to get them to display on the loggeed in users page
     let arrayOfUserIds = Object.values(onlineUsers);
 
+    //currently only updates when I refresh the page
     getUsersByIds(arrayOfUserIds).then(userIds => {
         //send results to clients so it can be put into redux to be rendered on the page
         socket.emit("onlineUsers", userIds.rows);
@@ -344,7 +345,7 @@ io.on("connection", function(socket) {
     //this will only be emitted to the person that just logged in but not ht others taht are already online (above code)
     //need to take user id of the person that just logged in and give it to the rest of the people that are online, first we need to get all the info of ther perosn that just logged in
 
-    //create database query
+    //currently only refreshes when I reload the page
     updateActiveUsers(socket.request.session.userID).then(newUser => {
         socket.broadcast.emit("userJoined", {
             newUserInfo: newUser.rows
