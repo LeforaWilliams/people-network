@@ -47,14 +47,20 @@ export class Login extends React.Component {
                         name="email"
                         placeholder="Email"
                         onChange={this.handleChange}
+                        autocomplete="off"
                     />
+
                     <input
                         name="password"
                         type="password"
                         placeholder="Password"
                         onChange={this.handleChange}
                     />
+                </div>
+
+                <div>
                     <button onClick={this.submit}>Log in </button>
+
                     <p>
                         <Link to="/">Register here</Link> if you dont have an
                         account yet

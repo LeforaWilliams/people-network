@@ -13,7 +13,8 @@ const {
     setFriendshipStatus,
     acceptRequest,
     endFriendship,
-    getRelationships
+    getRelationships,
+    getUsersByIds
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -48,13 +49,17 @@ let uploader = multer({
 
 app.disable("x-powered-by");
 app.use(require("body-parser").json());
-app.use(
-    cookieSession({
-        // adds a session object to every req.object
-        secret: `Ficus elastica`,
-        maxAge: 1000 * 60 * 60 * 24 * 16
-    })
-);
+
+//cookiesession for socket io
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+
+app.use(cookieSessionMiddleware);
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(csurf());
 app.use(function(req, res, next) {
@@ -142,7 +147,6 @@ app.post("/login", function(req, res) {
                     userInfo.rows[0].password
                 ).then(function(checkPassRes) {
                     if (checkPassRes) {
-                        console.log("USER INFO AFTER LOGIN", userInfo.rows[0]);
                         req.session.userID = userInfo.rows[0].id;
                         req.session.loggedIn = userInfo.rows[0].id;
                         req.session.firstname = userInfo.rows[0].name;
@@ -161,7 +165,7 @@ app.post("/login", function(req, res) {
                     }
                 });
             })
-            .catch(function(err) {
+            .catch(err => {
                 console.log("Error in LOGIN CATCH ROUTE>>>>>>>>SERVER", err);
                 res.json({
                     success: false
@@ -170,7 +174,14 @@ app.post("/login", function(req, res) {
     }
 });
 
-app.get("/user", function(req, res) {
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.json({
+        success: true
+    });
+});
+
+app.get("/user", (req, res) => {
     res.json({
         firstname: req.session.firstname,
         lastname: req.session.lastname,
@@ -203,7 +214,6 @@ app.post("/bioupload", (req, res) => {
 });
 
 app.get("/get-user/:userId", (req, res) => {
-    console.log();
     if (req.session.userID == req.params.userId) {
         return res.json({
             self: true
@@ -227,7 +237,6 @@ app.get("/get-user/:userId", (req, res) => {
 //get all potential and current freindships
 app.get("/relations", (req, res) => {
     getRelationships(req.session.userID).then(rel => {
-        console.log("IN RELATIONS DB RESPONSE", rel.rows);
         res.json(rel.rows);
     });
 });
@@ -328,3 +337,44 @@ app.get("*", function(req, res) {
 server.listen(8080, function() {
     console.log("I'm listening.");
 });
+
+//keeping track of everyoene that is logged in on the website, whne someone loggs in we store the socket id and the user id in the object
+let onlineUsers = {};
+
+io.on("connection", function(socket) {
+    // all our socket.io code will live in here -server side
+    console.log(`socket with id ${socket.id} has connected`);
+    //reference the session object you have been referenceing in your server to chek if a user is logged in
+    if (!socket.request.session || !socket.request.session.userID) {
+        return socket.disconnect(true);
+    }
+
+    const socketId = socket.id;
+    const userId = socket.request.session.userID;
+
+    //adding to socket id as key and userid as value to the onlineusers object
+    onlineUsers[socketId] = userId;
+
+    //this takes the values of the online users object to pass it to the DB to get all the information of the users with the corresponding ids to get them to display on the loggeed in users page
+    let arrayOfUserIds = Object.values(onlineUsers);
+
+    getUsersByIds(arrayOfUserIds).then(userIds => {
+        //send results to clients so it can be put into redux to be rendered on the page
+        socket.emit("onlineUsers", userIds.rows);
+    });
+
+    //this will only be emitted to the person that just logged in but not ht others taht are already online,
+    //need to take user id of the person that just logged in and give it to the rest of the people that are online, first we need to get all the info of ther perosn that just logged in
+
+    //create database query
+    // socket.brodcast("userJoined", payload);
+
+    // when user loggs out
+    socket.on("disconnect", function() {
+        console.log(`socket with ${socket.id} has left`);
+
+        //listen for that in socket.js and dispatch action
+        io.sockets.emit("userLeft", userId);
+    });
+});
+// socket io work on events

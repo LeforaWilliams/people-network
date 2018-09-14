@@ -15,7 +15,6 @@ class Friends extends React.Component {
 
     render() {
         const { friends, wannabes } = this.props;
-        console.log("LOGGING FRIENDS AND WANNABES", this.props);
         if (wannabes == null) {
             return null;
         }
@@ -87,7 +86,6 @@ class Friends extends React.Component {
 }
 
 function mapStateToProps(reduxState) {
-    console.log("IN MAPS STATE TO PROPS", reduxState);
     return {
         wannabes:
             reduxState.users &&

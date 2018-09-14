@@ -8,6 +8,8 @@ import { Profile } from "./profile.js";
 import { BrowserRouter, Route } from "react-router-dom";
 import OtherProfile from "./OtherProfile.js";
 import Friends from "./friends.js";
+import Logout from "./logout.js";
+import Online from "./online.js";
 
 export class App extends React.Component {
     constructor() {
@@ -71,20 +73,23 @@ export class App extends React.Component {
         const { firstname, lastname, imageUrl, bio, showBio } = this.state;
 
         return (
-            <div>
-                <ProfilePic
-                    uploaderModalFunction={this.makeUploaderVisible}
-                    imageUrl={imageUrl}
-                    firstname={firstname}
-                    lastname={lastname}
-                    userID={this.state.userID}
-                />
+            <BrowserRouter>
+                <div>
+                    <Link to="/friends">Friends</Link>
+                    <Link to="/online"> Online PEOPLE</Link>
+                    <Logout />
+                    <ProfilePic
+                        uploaderModalFunction={this.makeUploaderVisible}
+                        imageUrl={imageUrl}
+                        firstname={firstname}
+                        lastname={lastname}
+                        userID={this.state.userID}
+                    />
 
-                {this.state.uploaderVisible && (
-                    <Uploader updateImage={this.updateImage} />
-                )}
+                    {this.state.uploaderVisible && (
+                        <Uploader updateImage={this.updateImage} />
+                    )}
 
-                <BrowserRouter>
                     <div>
                         <Route
                             exact
@@ -103,9 +108,10 @@ export class App extends React.Component {
                         />
                         <Route path="/user/:userId" component={OtherProfile} />
                         <Route path="/friends" component={Friends} />
+                        <Route path="/online" component={Online} />
                     </div>
-                </BrowserRouter>
-            </div>
+                </div>
+            </BrowserRouter>
         );
     }
 }

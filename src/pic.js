@@ -18,6 +18,7 @@ export class ProfilePic extends React.Component {
                         this.props.firstname
                     } ${this.props.lastname}`}
                 />
+                {/*<p> {this.props.friendLink} </p>*/}
             </div>
         );
     }

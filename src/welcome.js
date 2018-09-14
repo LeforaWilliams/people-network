@@ -10,11 +10,14 @@ import { Login } from "./login.js";
 export function Welcome() {
     return (
         <div id="welcome-wrap" className="flex-container">
-            <p>
-                Out there somewhere are the kind of people who do not accept the
-                premature autopsy of a noble art form. These are the ones{" "}
-            </p>
-            <h1 className="alien-script">37d03d</h1>
+            <section className="welcome-people-quote">
+                <p>
+                    Out there somewhere are the kind of people who do not accept
+                    the premature autopsy of a noble art form.
+                </p>
+                <h1 className="alien-script">37d03d</h1>
+                <p> These are the ones. </p>
+            </section>
 
             <HashRouter>
                 <div>

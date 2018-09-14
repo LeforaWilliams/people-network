@@ -44,7 +44,10 @@ export class FriendButton extends React.Component {
                 .catch(err => {
                     console.log("ERROR WHEN MAKING A REQUEST- AXIOS", err);
                 });
-        } else if (this.state.status === "pending") {
+        } else if (
+            this.state.status === "pending" &&
+            this.state.sender === this.props.otherUserID
+        ) {
             axios
                 .post("/accept-request", { userID: this.props.otherUserID })
                 .then(data => {

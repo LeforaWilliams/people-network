@@ -25,4 +25,9 @@ export async function deleteFriend(id) {
     };
 }
 
-//change those routes to the original ones on the server
+export function getOnlineUsers(users) {
+    return {
+        type: "GET_ONLINE_USERS",
+        users
+    };
+}

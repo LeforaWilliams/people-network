@@ -1,6 +1,7 @@
 body {
     margin: 0;
     font-family: "Roboto", sans-serif;
+    text-align: center;
 }
 
 /*############# UNIVERSAL STYLES ###############  */
@@ -12,18 +13,24 @@ body {
     flex-wrap: wrap;
 }
 
-.block-input-style {
-    padding: 0 25%;
+/* .block-input-style {
+    padding: 2% 24%;
+} */
+
+.input-unit input {
+    display: block;
 }
 
 .block-input-style input {
     font-family: "Roboto Mono", monospace;
+    box-sizing: border-box;
     font-size: 1.4rem;
     color: gray;
     height: 35px;
     width: 300px;
     margin-bottom: 4%;
-    margin-right: 2%;
+    text-align: center;
+    outline-color: tomato;
 }
 
 img {
@@ -31,9 +38,17 @@ img {
     width: 200px;
     object-fit: cover;
 }
+button {
+    margin-top: 5px;
+    display: block;
+}
 /*############# UNIVERSAL STYLES END ###############  */
+.welcome-people-quote {
+    width: 100%;
+}
 
 #welcome-wrap {
+    padding-top: 6%;
 }
 
 #welcome-wrap h1 {
@@ -52,6 +67,9 @@ img {
     -webkit-text-fill-color: tomato;
     transform: rotate(180deg);
     cursor: none;
+}
+
+#welcome-wrap p {
 }
 
 .profile-pic-wrap {

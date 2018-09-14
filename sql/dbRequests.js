@@ -98,3 +98,10 @@ module.exports.getRelationships = function(currentUserID) {
         [currentUserID]
     );
 };
+
+module.exports.getUsersByIds = function getUsersByIds(arrayOfIds) {
+    return db.query(
+        `SELECT id, name , surname, imageUrl FROM users WHERE id = ANY($1)`,
+        [arrayOfIds]
+    );
+};
