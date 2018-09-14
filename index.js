@@ -343,7 +343,6 @@ let onlineUsers = {};
 
 io.on("connection", function(socket) {
     // all our socket.io code will live in here -server side
-    console.log(`socket with id ${socket.id} has connected`);
     //reference the session object you have been referenceing in your server to chek if a user is logged in
     if (!socket.request.session || !socket.request.session.userID) {
         return socket.disconnect(true);
@@ -374,7 +373,7 @@ io.on("connection", function(socket) {
         console.log(`socket with ${socket.id} has left`);
 
         //listen for that in socket.js and dispatch action
-        io.sockets.emit("userLeft", userId);
+        socket.emit("userLeft", userId);
     });
 });
 // socket io work on events

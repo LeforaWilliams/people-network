@@ -9,6 +9,11 @@ class Online extends React.Component {
 
     render() {
         const { online } = this.props;
+        console.log("ONLINE DATA", online);
+
+        if (!online) {
+            return null;
+        }
 
         return (
             <div>
