@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-const server = require("http").Server(app); //wrapping our express server in a node https server becuase soket io only works with a node server
+const server = require("http").Server(app);
 const io = require("socket.io")(server, { origins: "localhost:8080" });
 const {
     registerUser,
@@ -85,8 +85,7 @@ app.use(express.static("./public"));
 
 ////////////////////////////////////////////////////////////////////////////////
 
-app.post("/register", function(req, res) {
-    console.log(req.body);
+app.post("/register", (req, res) => {
     if (
         !req.body.firstname ||
         !req.body.lastname ||
@@ -98,7 +97,7 @@ app.post("/register", function(req, res) {
         });
     } else {
         hashPass(req.body.password)
-            .then(function(hashedPass) {
+            .then(hashedPass => {
                 return registerUser(
                     req.body.firstname,
                     req.body.lastname,
@@ -106,7 +105,7 @@ app.post("/register", function(req, res) {
                     hashedPass
                 );
             })
-            .then(function(userID) {
+            .then(userID => {
                 req.session.userID = userID.rows[0].id;
                 req.session.firstname = req.body.firstname;
                 req.session.lastname = req.body.lastname;
@@ -119,7 +118,7 @@ app.post("/register", function(req, res) {
                     success: true
                 });
             })
-            .catch(function(err) {
+            .catch(err => {
                 console.log("ERROR IN WELCOME POST ROUTE >>>>SERVER", err);
                 res.json({
                     sucess: false
@@ -128,25 +127,25 @@ app.post("/register", function(req, res) {
     }
 });
 
-app.get("/login", function(req, res) {
+app.get("/login", (req, res) => {
     if (req.session.loggedIn) {
         return res.redirect("/");
     }
     res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/login", function(req, res) {
+app.post("/login", (req, res) => {
     if (!req.body.email || !req.body.password) {
         res.json({
             success: false
         });
     } else {
         return loginUser(req.body.email)
-            .then(function(userInfo) {
+            .then(userInfo => {
                 return checkPass(
                     req.body.password,
                     userInfo.rows[0].password
-                ).then(function(checkPassRes) {
+                ).then(checkPassRes => {
                     if (checkPassRes) {
                         req.session.userID = userInfo.rows[0].id;
                         req.session.loggedIn = userInfo.rows[0].id;
@@ -192,9 +191,9 @@ app.get("/user", (req, res) => {
     });
 });
 
-app.post("/picupload", uploader.single("file"), s3.upload, function(req, res) {
+app.post("/picupload", uploader.single("file"), s3.upload, (req, res) => {
     updateProfilePic(req.session.userID, config.s3Url + req.file.filename)
-        .then(function(imageUrl) {
+        .then(imageUrl => {
             req.session.imageUrl = imageUrl.rows[0].imageurl;
             res.json({ url: imageUrl.rows[0].imageurl });
         })
@@ -209,7 +208,7 @@ app.post("/bioupload", (req, res) => {
             req.session.bio = newBio.rows[0].bio;
             res.json({ newBio: newBio.rows[0].bio });
         })
-        .catch(function(err) {
+        .catch(err => {
             console.log("ERROR IN BIOUPLOAD ROUTE CATCH", err);
         });
 });
@@ -294,7 +293,7 @@ app.post("/delete-friendship", (req, res) => {
 
 ////////////////FRIENDSHIPS END//////////////////////////////
 
-app.get("/welcome", function(req, res) {
+app.get("/welcome", (req, res) => {
     if (req.session.loggedIn) {
         return res.redirect("/");
     }
@@ -302,7 +301,7 @@ app.get("/welcome", function(req, res) {
 });
 
 /////////////////////////////////DO NOT TOUCH/////////////////////////////////// /////////////////////////////////DO NOT TOUCH/////////////////////////////////// /////////////////////////////////DO NOT TOUCH///////////////////////////////////
-app.get("*", function(req, res) {
+app.get("*", (req, res) => {
     if (!req.session.loggedIn) {
         return res.redirect("/welcome");
     }
@@ -312,16 +311,13 @@ app.get("*", function(req, res) {
 /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 
-server.listen(8080, function() {
+server.listen(8080, () => {
     console.log("I'm listening.");
 });
 
-//keeping track of everyoene that is logged in on the website, whne someone loggs in we store the socket id and the user id in the object
 let onlineUsers = {};
 
-io.on("connection", function(socket) {
-    // all our socket.io code will live in here -server side
-    //reference the session object you have been referenceing in your server to chek if a user is logged in
+io.on("connection", socket => {
     if (!socket.request.session || !socket.request.session.userID) {
         return socket.disconnect(true);
     }
@@ -329,37 +325,24 @@ io.on("connection", function(socket) {
     const socketId = socket.id;
     const userId = socket.request.session.userID;
 
-    //adding to socket id as key and userid as value to the onlineusers object
     onlineUsers[socketId] = userId;
 
-    //this takes the values of the online users object to pass it to the DB to get all the information of the users with the corresponding ids to get them to display on the loggeed in users page
     let arrayOfUserIds = Object.values(onlineUsers);
 
-    //currently only updates when I refresh the page
+    /////////////////////Socket Events//////////////////////////////
+
     getUsersByIds(arrayOfUserIds).then(userIds => {
-        //send results to clients so it can be put into redux to be rendered on the page
         socket.emit("onlineUsers", userIds.rows);
     });
 
-    //this will only be emitted to the person that just logged in but not ht others taht are already online (above code)
-    //need to take user id of the person that just logged in and give it to the rest of the people that are online, first we need to get all the info of ther perosn that just logged in
-    [socket.id];
-    //currently only refreshes when I reload the page
     updateActiveUsers(socket.request.session.userID).then(newUser => {
         socket.broadcast.emit("userJoined", newUser.rows.pop());
     });
 
-    // Keep in mind that it is possible for a single user to appear in your list more than once. If a user has the site open in two tabs, there will be two sockets associated with that user. For this reason, it is important to only remove the item from the list that has the matching socket id when 'disconnect' event occurs. If a user who has the site open in two tabs closes one of them, she should remain in the list of online users.
     socket.on("disconnect", () => {
-        console.log(
-            `socket with ${socket.id} has left. Their userID is ${
-                onlineUsers[socket.id]
-            }`
-        );
         if (userId != Object.values(onlineUsers)) {
             socket.broadcast.emit("userLeft", userId);
             delete onlineUsers[socketId];
         }
     });
 });
-// socket io work on events
