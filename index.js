@@ -356,8 +356,10 @@ io.on("connection", function(socket) {
                 onlineUsers[socket.id]
             }`
         );
-        socket.broadcast.emit("userLeft", userId);
-        delete onlineUsers[socketId];
+        if (userId != Object.values(onlineUsers)) {
+            socket.broadcast.emit("userLeft", userId);
+            delete onlineUsers[socketId];
+        }
     });
 });
 // socket io work on events
