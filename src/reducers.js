@@ -45,6 +45,16 @@ export default function(state = {}, action) {
             users: [...state.users, action.newUser]
         };
     }
+    if (action.type == "REMOVE_USER") {
+        console.log("ACTION ID IN REMOVE USER REDUCER.JS", action.id);
+        console.log("ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+        state = {
+            ...state,
+            users: state.users.filter(user => {
+                return user.id != action.user;
+            })
+        };
+    }
 
     return state;
 }

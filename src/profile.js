@@ -3,14 +3,6 @@ import ReactDOM from "react-dom";
 import axios from "./axios.js";
 import { Link } from "react-router-dom";
 
-{
-    /*click handler on bio button
-    if bio is null--> show buuton if not show bio with edit button
-    > fetch bio in component did mount in App component
-    > set the state with the fetched information
-    >*/
-}
-
 export class Profile extends React.Component {
     constructor(props) {
         super(props);
@@ -49,7 +41,6 @@ export class Profile extends React.Component {
             imageUrl,
             updateBio
         } = this.props;
-        console.log("IN PTOFILE ", firstname);
 
         return (
             <div>

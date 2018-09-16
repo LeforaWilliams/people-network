@@ -12,7 +12,6 @@ export class Login extends React.Component {
     }
 
     handleChange(e) {
-        console.log("Handlechange is running");
         this[e.target.name] = e.target.value;
     }
 
