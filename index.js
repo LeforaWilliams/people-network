@@ -304,7 +304,6 @@ app.get("/welcome", function(req, res) {
 /////////////////////////////////DO NOT TOUCH/////////////////////////////////// /////////////////////////////////DO NOT TOUCH/////////////////////////////////// /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 app.get("*", function(req, res) {
     if (!req.session.loggedIn) {
-        console.log("IN STAR ROUTE", req.url);
         return res.redirect("/welcome");
     }
     res.sendFile(__dirname + "/index.html");
@@ -344,24 +343,20 @@ io.on("connection", function(socket) {
 
     //this will only be emitted to the person that just logged in but not ht others taht are already online (above code)
     //need to take user id of the person that just logged in and give it to the rest of the people that are online, first we need to get all the info of ther perosn that just logged in
-
+    [socket.id];
     //currently only refreshes when I reload the page
     updateActiveUsers(socket.request.session.userID).then(newUser => {
-        socket.broadcast.emit("userJoined", {
-            newUserInfo: newUser.rows
-        });
-        // let newUser = userIds.filter(id => {
-        //     return id == socket.request.session.userID;
-        // });
+        socket.broadcast.emit("userJoined", newUser.rows.pop());
     });
-    // });
 
-    // when user loggs out
-    socket.on("disconnect", function() {
-        console.log(`socket with ${socket.id} has left`);
-
-        //listen for that in socket.js and dispatch action
-        socket.emit("userLeft", userId);
+    // Keep in mind that it is possible for a single user to appear in your list more than once. If a user has the site open in two tabs, there will be two sockets associated with that user. For this reason, it is important to only remove the item from the list that has the matching socket id when 'disconnect' event occurs. If a user who has the site open in two tabs closes one of them, she should remain in the list of online users.
+    socket.on("disconnect", () => {
+        console.log(
+            `socket with ${socket.id} has left. Their userID is ${
+                onlineUsers[socket.id]
+            }`
+        );
+        socket.broadcast.emit("userLeft", userId);
     });
 });
 // socket io work on events

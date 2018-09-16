@@ -42,7 +42,7 @@ export default function(state = {}, action) {
     if (action.type == "NEW_USER_ONLINE") {
         state = {
             ...state,
-            newUser: action.newUser
+            users: [...state.users, action.newUser]
         };
     }
 

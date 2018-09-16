@@ -1,5 +1,5 @@
 import * as io from "socket.io-client";
-import { getOnlineUsers } from "./action.js";
+import { getOnlineUsers, newUserOnline, userHasLeft } from "./action.js";
 
 let socket;
 
@@ -14,8 +14,12 @@ export function getSocket(store) {
         });
 
         socket.on("userJoined", data => {
-            console.log("a new user has just logged in", data);
             store.dispatch(newUserOnline(data));
+        });
+
+        socket.on("userLeft", data => {
+            console.log("This user has just left- SOCKET.JS", data);
+            store.dispatch(userHasLeft(data));
         });
     }
 

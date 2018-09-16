@@ -38,3 +38,10 @@ export function newUserOnline(newUser) {
         newUser
     };
 }
+
+export function userHasLeft(user) {
+    return {
+        type: "REMOVE_USER",
+        user
+    };
+}

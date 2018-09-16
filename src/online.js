@@ -35,7 +35,6 @@ class Online extends React.Component {
 }
 
 function mapStateToProps(reduxState) {
-    console.log("GLOBAL STATE IN ONLINE COMPONENT", reduxState);
     return {
         online: reduxState.users
     };
