@@ -335,14 +335,20 @@ io.on("connection", socket => {
         socket.emit("onlineUsers", userIds.rows);
     });
 
-    updateActiveUsers(socket.request.session.userID).then(newUser => {
-        socket.broadcast.emit("userJoined", newUser.rows.pop());
-    });
+    if (arrayOfUserIds.filter(id => id == userId).length == 1) {
+        updateActiveUsers(socket.request.session.userID).then(newUser => {
+            socket.broadcast.emit("userJoined", newUser.rows.pop());
+        });
+    }
 
-    socket.on("disconnect", () => {
-        if (userId != Object.values(onlineUsers)) {
-            socket.broadcast.emit("userLeft", userId);
+    if (!arrayOfUserIds.includes(userId)) {
+        socket.on("disconnect", () => {
             delete onlineUsers[socketId];
-        }
+            socket.broadcast.emit("userLeft", userId);
+        });
+    }
+
+    socket.on("chatmessage", function(message) {
+        io.sockets.emit("chatmessage", message);
     });
 });

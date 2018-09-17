@@ -44,7 +44,7 @@ export class Profile extends React.Component {
 
         return (
             <div>
-                <div className="bio-section flex-container">
+                <div className="bio-section">
                     <h1>
                         {firstname} {lastname}
                     </h1>
@@ -54,10 +54,12 @@ export class Profile extends React.Component {
                     {bio ? (
                         <div className="bio-content-wrap">
                             <p className="bio-content"> {bio} </p>
-                            <p className="edit-bio" onClick={toggleBio}>
-                                {" "}
-                                Edit bio
-                            </p>
+                            <img
+                                src="/images/edit.svg"
+                                className="edit-bio"
+                                onClick={toggleBio}
+                                title="Edit Bio"
+                            />
                         </div>
                     ) : (
                         <p onClick={toggleBio}>Add a bio</p>

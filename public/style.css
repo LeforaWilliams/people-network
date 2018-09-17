@@ -2,6 +2,8 @@ body {
     margin: 0;
     font-family: "Roboto", sans-serif;
     text-align: center;
+    /* border: 15px solid tomato;
+    height: 100%; */
 }
 
 /*############# UNIVERSAL STYLES ###############  */
@@ -92,9 +94,32 @@ button {
     width: 400px;
 }
 
+/*############ BIO######## */
+p.bio-content {
+    display: inline-block;
+}
+
+img.edit-bio {
+    height: 25px;
+    width: 25px;
+    padding-left: 2%;
+    cursor: pointer;
+}
+
 .other-profile-wrap h1 {
     color: tomato;
     font-size: 15rem;
     font-family: "Roboto Mono";
     margin: 0 auto;
+}
+
+/* #######LOGOUT####### */
+
+.logout-wrap img {
+    height: 50px;
+    width: 50px;
+    position: fixed;
+    bottom: 30px;
+    left: 15px;
+    cursor: pointer;
 }

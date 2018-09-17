@@ -15,6 +15,10 @@ export default class Logout extends React.Component {
     }
 
     render() {
-        return <p onClick={this.logout}> Logout </p>;
+        return (
+            <div onClick={this.logout} className="logout-wrap">
+                <img src="/images/closed-eye.png" title="Logout" />
+            </div>
+        );
     }
 }
