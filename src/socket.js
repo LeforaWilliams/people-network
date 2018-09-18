@@ -1,5 +1,11 @@
 import * as io from "socket.io-client";
-import { getOnlineUsers, newUserOnline, userHasLeft } from "./action.js";
+import {
+    getOnlineUsers,
+    newUserOnline,
+    userHasLeft,
+    chatMessage,
+    recentMessages
+} from "./action.js";
 
 let socket;
 
@@ -16,8 +22,16 @@ export function getSocket(store) {
         });
 
         socket.on("userLeft", data => {
-            console.log("This user has just left- SOCKET.JS", data);
             store.dispatch(userHasLeft(data));
+        });
+
+        socket.on("chatMessage", data => {
+            console.log("DATA FROM SERVER IN SOCKET.JS", data);
+            store.dispatch(chatMessage(data));
+        });
+
+        socket.on("chatMessages", data => {
+            store.dispatch(recentMessages(data));
         });
     }
 

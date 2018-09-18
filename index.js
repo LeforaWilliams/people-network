@@ -15,7 +15,9 @@ const {
     endFriendship,
     getRelationships,
     getUsersByIds,
-    updateActiveUsers
+    updateActiveUsers,
+    saveMessage,
+    returnRecentMessages
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -348,7 +350,24 @@ io.on("connection", socket => {
         });
     }
 
-    socket.on("chatmessage", function(message) {
-        io.sockets.emit("chatmessage", message);
+    //saving chat message in db and sending it back along with details about sender to diplay
+    socket.on("chatMessage", message => {
+        saveMessage(userId, message).then(data => {
+            io.sockets.emit("chatMessage", {
+                message,
+                sender: userId,
+                imageurl: socket.request.session.imageUrl,
+                created_at: data.rows[0].created_at,
+                name: socket.request.session.firstname,
+                surname: socket.request.session.lastname
+            });
+        });
+    });
+
+    // this is to get the 10 most recent messages from the db
+    returnRecentMessages().then(messages => {
+        socket.emit("chatMessages", messages.rows.reverse());
     });
 });
+
+//socket.broadcast.emit

@@ -59,6 +59,7 @@ export class Profile extends React.Component {
                                 className="edit-bio"
                                 onClick={toggleBio}
                                 title="Edit Bio"
+                                id="pencil"
                             />
                         </div>
                     ) : (
@@ -73,6 +74,9 @@ export class Profile extends React.Component {
                         />
                     )}
                 </div>
+                <h2 className="top-bottom">
+                    Location {this.props.location || "EARTH"}{" "}
+                </h2>
             </div>
         );
     }

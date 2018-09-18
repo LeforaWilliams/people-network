@@ -45,3 +45,17 @@ export function userHasLeft(user) {
         user
     };
 }
+
+export function chatMessage(data) {
+    return {
+        type: "GET_CHAT_MESSAGE",
+        data
+    };
+}
+
+export function recentMessages(data) {
+    return {
+        type: "GET_RECENT_MESSAGES",
+        data
+    };
+}

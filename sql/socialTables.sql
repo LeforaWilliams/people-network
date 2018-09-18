@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS friendships;
+DROP TABLE IF EXISTS chat;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -18,4 +19,11 @@ CREATE TABLE friendships (
     sender_id INT NOT NULL REFERENCES users(id),
     status VARCHAR(168) NOT NULL DEFAULT 'pending'
 
+);
+
+CREATE TABLE chat(
+    id SERIAL PRIMARY KEY,
+    sender_id INT NOT NULL REFERENCES users(id),
+    message VARCHAR(5000) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

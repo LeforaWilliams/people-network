@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import Chat from "./chat.js";
 
 class Online extends React.Component {
     constructor() {
@@ -29,6 +30,7 @@ class Online extends React.Component {
                         );
                     })}
                 </div>;
+                <Chat />
             </div>
         );
     }

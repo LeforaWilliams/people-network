@@ -14,7 +14,6 @@ export default class OtherProfile extends React.Component {
             `/get-user/${this.props.match.params.userId}`
         );
         if (res.data.self) {
-            console.log("IN SELF TRUE");
             return this.props.history.push("/");
         }
 
@@ -40,7 +39,7 @@ export default class OtherProfile extends React.Component {
             <div className="other-profile-wrap">
                 <h1> 0THER PR0FILE </h1>
                 <p> USER {this.state.firstname} </p>
-                <img src={this.state.imageUrl} />
+                <img className="profile-image" src={this.state.imageUrl} />
                 <FriendButton otherUserID={this.props.match.params.userId} />
             </div>
         );

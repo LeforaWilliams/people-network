@@ -112,3 +112,21 @@ module.exports.updateActiveUsers = function(userID) {
         [userID]
     );
 };
+
+module.exports.saveMessage = function(sender, message) {
+    return db.query(
+        `INSERT INTO chat (sender_id, message) VALUES($1,$2) RETURNING id, created_at`,
+        [sender, message]
+    );
+};
+
+module.exports.returnRecentMessages = function() {
+    return db.query(
+        `SELECT users.id, users.name, users.surname, users.imageUrl, chat.id as chatid, chat.sender_id, chat.message, chat.created_at
+          FROM chat
+          LEFT JOIN users
+          ON users.id = sender_id
+          ORDER BY chatid DESC
+          LIMIT 10`
+    );
+};

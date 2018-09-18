@@ -54,5 +54,19 @@ export default function(state = {}, action) {
         };
     }
 
+    if (action.type == "GET_CHAT_MESSAGE") {
+        state = {
+            ...state,
+            recentMessages: [...state.recentMessages, action.data]
+        };
+    }
+
+    if (action.type == "GET_RECENT_MESSAGES") {
+        state = {
+            ...state,
+            recentMessages: action.data
+        };
+    }
+
     return state;
 }

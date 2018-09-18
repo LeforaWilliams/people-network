@@ -24,7 +24,6 @@ export class App extends React.Component {
 
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
-            // console.log("USER DATA", data);
             this.setState(data);
         });
     }
@@ -67,14 +66,11 @@ export class App extends React.Component {
                 "http://www.psdgraphics.com/file/dark-gradient.jpg";
         }
 
-        {
-            /*State Variables Deconstructed*/
-        }
         const { firstname, lastname, imageUrl, bio, showBio } = this.state;
 
         return (
             <BrowserRouter>
-                <div>
+                <div id="app-wrap">
                     <Link to="/friends">Friends</Link>
                     <Link to="/online"> Online PEOPLE</Link>
                     <Logout />
