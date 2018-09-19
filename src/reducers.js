@@ -2,7 +2,6 @@ import React from "react";
 
 export default function(state = {}, action) {
     if (action.type == "RECEIVE_FRIENDS_WANNABES") {
-        console.log("ACTION IN REDUCER", action);
         state = {
             ...state,
             users: action.users
@@ -36,19 +35,19 @@ export default function(state = {}, action) {
     if (action.type == "GET_ONLINE_USERS") {
         state = {
             ...state,
-            users: action.users
+            online_users: action.users
         };
     }
     if (action.type == "NEW_USER_ONLINE") {
         state = {
             ...state,
-            users: [...state.users, action.newUser]
+            online_users: [...state.users, action.newUser]
         };
     }
     if (action.type == "REMOVE_USER") {
         state = {
             ...state,
-            users: state.users.filter(user => {
+            online_users: state.users.filter(user => {
                 return user.id != action.user;
             })
         };

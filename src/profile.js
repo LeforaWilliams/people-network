@@ -74,7 +74,7 @@ export class Profile extends React.Component {
                         />
                     )}
                 </div>
-                <h2 className="top-bottom">
+                <h2 className="bottom-top">
                     Location {this.props.location || "EARTH"}{" "}
                 </h2>
             </div>

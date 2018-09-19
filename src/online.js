@@ -16,20 +16,22 @@ class Online extends React.Component {
         }
 
         return (
-            <div>
-                <h1>Connect with online users</h1>
-                <div className="online-wrap flex-contianer">
+            <div className="online-wrap flex-container">
+                <h1>Online</h1>
+                <div className="online-users-wrap">
                     {online.map(user => {
                         return (
                             <div key={user.id} className="online-user-unit">
-                                <img src={user.imageurl} />
-                                <p>
-                                    {user.name} {user.surname}
-                                </p>
+                                <div className="media-body">
+                                    <img src={user.imageurl} />
+                                    <p>
+                                        {user.name} {user.surname}
+                                    </p>
+                                </div>
                             </div>
                         );
                     })}
-                </div>;
+                </div>
                 <Chat />
             </div>
         );
@@ -38,7 +40,7 @@ class Online extends React.Component {
 
 function mapStateToProps(reduxState) {
     return {
-        online: reduxState.users
+        online: reduxState.online_users
     };
 }
 

@@ -1,10 +1,14 @@
 body {
     margin: 0;
-    font-family: "Roboto", sans-serif;
+    font-family: "Roboto Mono", monospace;
     text-align: center;
+    box-sizing: border-box;
 }
 
 /*############# UNIVERSAL STYLES ###############  */
+.flex-container-border {
+    border: 2px dashed blue;
+}
 
 .flex-container {
     display: flex;
@@ -22,7 +26,6 @@ body {
 }
 
 .block-input-style input {
-    font-family: "Roboto Mono", monospace;
     box-sizing: border-box;
     font-size: 1.4rem;
     color: gray;
@@ -38,14 +41,11 @@ img {
     width: 200px;
     object-fit: cover;
 }
-button {
-    margin-top: 5px;
-    display: block;
-}
 
 #app-wrap {
-    border: 15px solid tomato;
+    /* border: 15px solid tomato; */
     height: 100%;
+    background: url("/images/water-rain.png") no-repeat center center fixed;
 }
 
 /*############# UNIVERSAL STYLES END ###############  */
@@ -78,6 +78,13 @@ button {
 #welcome-wrap p {
 }
 
+#welcome-wrap button {
+    margin-top: 5px;
+    display: block;
+}
+
+/* #########PROFILE PIC############# */
+
 .profile-pic-wrap {
     justify-content: flex-end;
     padding-right: 2%;
@@ -107,11 +114,12 @@ button {
     margin-top: -4%;
 }
 
-h2.top-bottom {
+.bottom-top {
     writing-mode: vertical-rl;
     position: absolute;
-    top: 39%;
-    left: 20%;
+    top: 42%;
+    left: 28%;
+    transform: rotate(180deg);
 }
 
 /*############ BIO######## */
@@ -131,6 +139,56 @@ img.edit-bio {
     font-size: 15rem;
     font-family: "Roboto Mono";
     margin: 0 auto;
+}
+
+/*############CHAT############*/
+.chat-wrap {
+    max-height: 400px;
+    overflow: auto;
+}
+
+/*############FRIENDS############*/
+.wannabes-wrap,
+.friends-wrap {
+    padding: 0 4%;
+}
+.wannabes-wrap.flex-container,
+.friends-wrap.flex-container {
+    justify-content: space-around;
+    align-items: space-around;
+    margin-bottom: 6%;
+}
+
+.wannabe-unit,
+.friend-unit {
+    /* background-color: rgba(0, 0, 16, 0.8); */
+    border: 1px solid grey;
+    padding: 1%;
+    margin-top: 2%;
+    /* opacity: 0;
+
+    transition-duration: 0.3s;
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.3, 0, 0.4, 1); */
+}
+
+.wannabe-unit:hover {
+    opacity: 1;
+}
+
+.wannabe-unit button {
+}
+
+/* #######ONLINE####### */
+.online-users-wrap {
+    flex-direction: column;
+}
+
+.online-wrap img {
+    flex-basis: 100px;
+    border-radius: 50%;
+    height: 70px;
+    width: 70px;
 }
 
 /* #######LOGOUT####### */

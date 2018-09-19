@@ -22,21 +22,23 @@ class Friends extends React.Component {
         return (
             <div>
                 <h1> Relationships </h1>
-                <div className="wannabes-wrap">
-                    <h2> These 37d03d requested to be your freind </h2>
+                <h2> These 37d03d requested to be your freind </h2>
+
+                <div className="wannabes-wrap flex-container">
                     {wannabes.map(user => {
                         return (
-                            <div key={user.id} className="wannabe-unit">
-                                <p>
-                                    {user.name} {user.surname}
-                                </p>
-
+                            <div key={user.id} className="wannabe-unit ">
                                 <img
                                     src={
                                         user.imageurl ||
                                         "http://www.psdgraphics.com/file/dark-gradient.jpg"
                                     }
                                 />
+
+                                <p>
+                                    {user.name} {user.surname}
+                                </p>
+
                                 <button
                                     className="friend-button"
                                     onClick={() => {
@@ -52,20 +54,21 @@ class Friends extends React.Component {
                     })}
                 </div>
 
-                <div className="friends-wrap">
-                    <h2>These 37d03d are your friends </h2>
+                <h2>These 37d03d are your friends </h2>
+
+                <div className="friends-wrap flex-container">
                     {friends.map(user => {
                         return (
                             <div className="friend-unit" key={user.id}>
-                                <p>
-                                    {user.name} {user.surname}
-                                </p>
                                 <img
                                     src={
                                         user.imageurl ||
                                         "http://www.psdgraphics.com/file/dark-gradient.jpg"
                                     }
                                 />
+                                <p>
+                                    {user.name} {user.surname}
+                                </p>
                                 <button
                                     className="friend-button"
                                     onClick={() => {

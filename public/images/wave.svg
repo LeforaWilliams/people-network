@@ -1,0 +1,33 @@
+<svg width="100" height="60" viewBox="5 0 100 60" xmlns="http://www.w3.org/2000/svg">
+<defs><style>
+
+   .wave { 
+      fill:none;
+      stroke:#fff;
+      stroke-miterlimit:10;
+      width: 100px;
+      stroke-width:4px;
+      stroke-linecap: round;
+      
+     animation: moveTheWave 2000ms linear infinite;
+  stroke-dasharray: 0 0 0 0;
+   }
+   
+
+   @keyframes moveTheWave {
+
+     0% {
+       stroke-dashoffset: 0;
+       transform: translate3d(0, 0, 0);
+     }
+
+     100% {
+       stroke-dashoffset: 40;
+       transform: translate3d(-73px, 0, 0);
+     }
+
+   }
+   </style></defs>
+
+<path class="wave" d="M10,16c17.93,0,17.93,12,35.86,12S63.8,16,81.73,16s17.93,12,35.86,12,17.94-12,35.87-12,17.94,12,35.87,12 $=1$=010.0"/>
+</svg>

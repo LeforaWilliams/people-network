@@ -17,9 +17,12 @@ class Chat extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        this.elem.scrollTop = this.elem.scrollHeight - this.elem.clientHeight;
+    }
+
     render() {
         const { messages } = this.props;
-        console.log("MESSAGES DATA", messages);
 
         if (!messages) {
             return null;
@@ -28,7 +31,7 @@ class Chat extends React.Component {
         return (
             <div className="chat-wrap">
                 <h2> PEOPLE Chat </h2>
-                <div className="chat-messages">
+                <div className="chat-messages" ref={elem => (this.elem = elem)}>
                     {messages.map(message => {
                         return (
                             <div key={message.chatid} className="chat-unit">
