@@ -59,3 +59,17 @@ export function recentMessages(data) {
         data
     };
 }
+
+export function privateMessage(data) {
+    return {
+        type: "GET_PRIVATE_MESSAGES",
+        data
+    };
+}
+
+export function newPrivateMessage(data) {
+    return {
+        type: "NEW_PM",
+        data
+    };
+}

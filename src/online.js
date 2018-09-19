@@ -22,12 +22,10 @@ class Online extends React.Component {
                     {online.map(user => {
                         return (
                             <div key={user.id} className="online-user-unit">
-                                <div className="media-body">
-                                    <img src={user.imageurl} />
-                                    <p>
-                                        {user.name} {user.surname}
-                                    </p>
-                                </div>
+                                <img src={user.imageurl} />
+                                <p>
+                                    {user.name} {user.surname}
+                                </p>
                             </div>
                         );
                     })}

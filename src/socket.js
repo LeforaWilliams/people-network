@@ -4,7 +4,9 @@ import {
     newUserOnline,
     userHasLeft,
     chatMessage,
-    recentMessages
+    recentMessages,
+    privateMessage,
+    newPrivateMessage
 } from "./action.js";
 
 let socket;
@@ -32,6 +34,15 @@ export function getSocket(store) {
 
         socket.on("chatMessages", data => {
             store.dispatch(recentMessages(data));
+        });
+
+        socket.on("privateMessageDb", data => {
+            console.log("PRIVATE MESSAGE DATA", data);
+            store.dispatch(privateMessage(data));
+        });
+
+        socket.on("privateChatHistory", data => {
+            store.dispatch(newPrivateMessage(data));
         });
     }
 

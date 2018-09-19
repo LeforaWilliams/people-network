@@ -94,7 +94,7 @@ module.exports.getRelationships = function(currentUserID) {
     JOIN users
     ON (status = 'pending' AND receiver_id = $1 AND sender_id = users.id)
     OR (status = 'friends' AND receiver_id = $1 AND sender_id = users.id)
-    OR (status = 'friends' AND receiver_id = $1 AND sender_id = users.id)`,
+    OR (status = 'friends' AND sender_id = $1 AND  receiver_id= users.id)`,
         [currentUserID]
     );
 };
@@ -128,5 +128,25 @@ module.exports.returnRecentMessages = function() {
           ON users.id = sender_id
           ORDER BY chatid DESC
           LIMIT 10`
+    );
+};
+module.exports.savePrivateMessage = function(sender, receiver, message) {
+    return db.query(
+        `INSERT INTO private_chat (sender_id, receiver_id, message) VALUES($1,$2,$3) RETURNING sender_id, receiver_id, created_at`,
+        [sender, receiver, message]
+    );
+};
+
+module.exports.getPrivateMessages = function(sender, receiver) {
+    return db.query(
+        `SELECT users.id, users.name, users.surname, users.imageUrl, private_chat.id as chatid, private_chat.sender_id, private_chat.message, private_chat.created_at
+          FROM private_chat
+          LEFT JOIN users
+          ON (receiver_id = $1 AND sender_id = $2)
+          OR (receiver_id = $2 AND sender_id = $1)
+          ORDER BY chatid DESC
+          LIMIT 10
+          `,
+        [sender, receiver]
     );
 };

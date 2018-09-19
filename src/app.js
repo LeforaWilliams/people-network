@@ -10,6 +10,7 @@ import OtherProfile from "./OtherProfile.js";
 import Friends from "./friends.js";
 import Logout from "./logout.js";
 import Online from "./online.js";
+import Private from "./private-chat.js";
 
 export class App extends React.Component {
     constructor() {
@@ -105,6 +106,7 @@ export class App extends React.Component {
                         <Route path="/user/:userId" component={OtherProfile} />
                         <Route path="/friends" component={Friends} />
                         <Route path="/online" component={Online} />
+                        <Route exat path="/private-chat/" component={Private} />
                     </div>
                 </div>
             </BrowserRouter>

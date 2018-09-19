@@ -17,7 +17,9 @@ const {
     getUsersByIds,
     updateActiveUsers,
     saveMessage,
-    returnRecentMessages
+    returnRecentMessages,
+    savePrivateMessage,
+    getPrivateMessages
 } = require("./sql/dbRequests.js");
 const cookieSession = require("cookie-session");
 const { hashPass, checkPass } = require("./encryption.js");
@@ -368,6 +370,35 @@ io.on("connection", socket => {
     returnRecentMessages().then(messages => {
         socket.emit("chatMessages", messages.rows.reverse());
     });
-});
 
+    // will only the other person see the new chat message?
+    socket.on("privateMessage", dm => {
+        savePrivateMessage(userId, dm.receiver, dm.message).then(data => {
+            let receiverSocket;
+            for (var key in onlineUsers) {
+                if (onlineUsers[key] == data.receiver_id) {
+                    receiverSocket = key;
+                    io.sockets.sockets[receiverSocket].emit(
+                        "privateMessageDb",
+                        {
+                            dm,
+                            sender: userId,
+                            imageurl: socket.request.session.imageUrl,
+                            created_at: data.rows[0].created_at,
+                            name: socket.request.session.firstname,
+                            surname: socket.request.session.lastname
+                        }
+                    );
+                }
+            }
+        });
+    });
+
+    socket.on("privateChatHistory", data => {
+        console.log("THIS PEROSN SEND A MESSAGE", data);
+        getPrivateMessages(userId, data).then(messages => {
+            socket.emit("privateChatHistory", messages.rows.reverse());
+        });
+    });
+});
 //socket.broadcast.emit

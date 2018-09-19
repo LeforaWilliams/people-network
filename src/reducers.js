@@ -1,6 +1,9 @@
 import React from "react";
-
-export default function(state = {}, action) {
+const INITIAL_STATE = {
+    messages: [],
+    privateMessages: []
+};
+export default function(state = INITIAL_STATE, action) {
     if (action.type == "RECEIVE_FRIENDS_WANNABES") {
         state = {
             ...state,
@@ -64,6 +67,20 @@ export default function(state = {}, action) {
         state = {
             ...state,
             recentMessages: action.data
+        };
+    }
+
+    if (action.type == "GET_PRIVATE_MESSAGES") {
+        state = {
+            ...state,
+            privateMessages: action.data
+        };
+    }
+
+    if (action.type == "NEW_PM") {
+        state = {
+            ...state,
+            privateMessages: [...state.privateMessages, action.data]
         };
     }
 

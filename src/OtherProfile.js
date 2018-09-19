@@ -41,6 +41,7 @@ export default class OtherProfile extends React.Component {
                 <p> USER {this.state.firstname} </p>
                 <img className="profile-image" src={this.state.imageUrl} />
                 <FriendButton otherUserID={this.props.match.params.userId} />
+                <img src="/images/paper-plane.svg" />
             </div>
         );
     }
