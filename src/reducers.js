@@ -84,5 +84,12 @@ export default function(state = INITIAL_STATE, action) {
         };
     }
 
+    if (action.type == "NULL_PM") {
+        state = {
+            ...state,
+            privateMessages: null
+        };
+    }
+
     return state;
 }

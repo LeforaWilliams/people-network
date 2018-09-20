@@ -376,24 +376,27 @@ io.on("connection", socket => {
     socket.on("privateMessage", dm => {
         savePrivateMessage(userId, dm.receiver, dm.message).then(data => {
             let receiverSocket;
+            let message = {
+                message: dm.message,
+                sender: userId,
+                imageurl: socket.request.session.imageUrl,
+                created_at: data.rows[0].created_at,
+                name: socket.request.session.firstname,
+                surname: socket.request.session.lastname
+            };
+
+            socket.emit("privateMessageDb", message);
+
             for (var key in onlineUsers) {
                 if (onlineUsers[key] == data.rows[0].receiver_id) {
                     receiverSocket = key;
-                    console.log("C");
-                    let message = {
-                        message: dm.message,
-                        sender: userId,
-                        imageurl: socket.request.session.imageUrl,
-                        created_at: data.rows[0].created_at,
-                        name: socket.request.session.firstname,
-                        surname: socket.request.session.lastname
-                    };
-                    io.sockets.sockets[receiverSocket].emit(
-                        "privateMessageDb",
-                        message
-                    );
 
-                    socket.emit("privateMessageDb", message);
+                    if (receiverSocket) {
+                        io.sockets.sockets[receiverSocket].emit(
+                            "privateMessageDb",
+                            message
+                        );
+                    }
                 }
             }
         });

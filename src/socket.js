@@ -36,6 +36,7 @@ export function getSocket(store) {
         });
 
         socket.on("privateMessageDb", data => {
+            console.log("SOCKET JS NEW");
             store.dispatch(newPrivateMessage(data));
         });
 

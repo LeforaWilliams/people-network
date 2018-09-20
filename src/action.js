@@ -72,3 +72,9 @@ export function newPrivateMessage(data) {
         data
     };
 }
+
+export function nullPrivateMessage() {
+    return {
+        type: "NULL_PM"
+    };
+}
