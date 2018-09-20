@@ -11,6 +11,9 @@ export class ProfilePic extends React.Component {
     render() {
         return (
             <div className="profile-pic-wrap flex-container">
+                <Link to="/friends">Friends</Link>
+                <Link to="/online"> Online PEOPLE</Link>
+                <Link to="/private-chat"> Private Messages </Link>
                 <img
                     onClick={this.props.uploaderModalFunction}
                     src={this.props.imageUrl}

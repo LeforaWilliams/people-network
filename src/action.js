@@ -2,7 +2,6 @@ import axios from "./axios.js";
 
 export async function receiveUsers() {
     const { data } = await axios.get("/relations");
-    console.log("DATA FROM RECIVE USERS ACTION JS", data);
     return {
         type: "RECEIVE_FRIENDS_WANNABES",
         users: data

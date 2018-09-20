@@ -44,13 +44,13 @@ export default function(state = INITIAL_STATE, action) {
     if (action.type == "NEW_USER_ONLINE") {
         state = {
             ...state,
-            online_users: [...state.users, action.newUser]
+            online_users: [...state.online_users, action.newUser]
         };
     }
     if (action.type == "REMOVE_USER") {
         state = {
             ...state,
-            online_users: state.users.filter(user => {
+            online_users: state.online_users.filter(user => {
                 return user.id != action.user;
             })
         };

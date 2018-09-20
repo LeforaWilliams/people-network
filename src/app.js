@@ -72,8 +72,6 @@ export class App extends React.Component {
         return (
             <BrowserRouter>
                 <div id="app-wrap">
-                    <Link to="/friends">Friends</Link>
-                    <Link to="/online"> Online PEOPLE</Link>
                     <Logout />
                     <ProfilePic
                         uploaderModalFunction={this.makeUploaderVisible}

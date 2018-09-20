@@ -87,10 +87,10 @@ export class FriendButton extends React.Component {
 
         return (
             <div className="friend-button-wrap">
-                <button className="friend-button" onClick={this.makeRequest}>
+                <h2 className="friend-button" onClick={this.makeRequest}>
                     {" "}
                     {buttonText}{" "}
-                </button>
+                </h2>
             </div>
         );
     }

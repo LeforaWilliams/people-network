@@ -13,13 +13,16 @@ export default class OtherProfile extends React.Component {
         const res = await axios.get(
             `/get-user/${this.props.match.params.userId}`
         );
+        console.log("Data I get back from the other user", res);
         if (res.data.self) {
             return this.props.history.push("/");
         }
 
         this.setState({
             firstname: res.data.firstname,
-            imageUrl: res.data.profilepic
+            lastname: res.data.lastname,
+            imageUrl: res.data.profilepic,
+            bio: res.data.bio
         });
     }
 
@@ -37,11 +40,22 @@ export default class OtherProfile extends React.Component {
 
         return (
             <div className="other-profile-wrap">
-                <h1> 0THER PR0FILE </h1>
-                <p> USER {this.state.firstname} </p>
-                <img className="profile-image" src={this.state.imageUrl} />
-                <FriendButton otherUserID={this.props.match.params.userId} />
-                <img src="/images/paper-plane.svg" />
+                {/*<h1> 0THER PR0FILE </h1>*/}
+                <div className="bio-section">
+                    <h1>
+                        {this.state.firstname} {this.state.lastname}
+                    </h1>
+                    {/*<h2>  {this.state.firstname} {this.state.lastname} </h2>*/}
+                    <div className="profile-image flex-container">
+                        <img src={this.state.imageUrl} />
+                    </div>
+                    <FriendButton
+                        otherUserID={this.props.match.params.userId}
+                    />
+                    <p className="other-bio">{this.state.bio}</p>
+                    <img src="/images/paper-plane.svg" />
+                </div>
+                <h2 className="bottom-top">Location EARTH</h2>
             </div>
         );
     }

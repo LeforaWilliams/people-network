@@ -228,7 +228,8 @@ app.get("/get-user/:userId", (req, res) => {
             res.json({
                 firstname: otherUserInfo.rows[0].name,
                 lastname: otherUserInfo.rows[0].surname,
-                profilepic: otherUserInfo.rows[0].imageurl
+                profilepic: otherUserInfo.rows[0].imageurl,
+                bio: otherUserInfo.rows[0].bio
             });
         })
         .catch(err => {
@@ -345,12 +346,12 @@ io.on("connection", socket => {
         });
     }
 
-    if (!arrayOfUserIds.includes(userId)) {
-        socket.on("disconnect", () => {
-            delete onlineUsers[socketId];
+    socket.on("disconnect", () => {
+        delete onlineUsers[socketId];
+        if (!Object.values(onlineUsers).includes(userId)) {
             socket.broadcast.emit("userLeft", userId);
-        });
-    }
+        }
+    });
 
     //saving chat message in db and sending it back along with details about sender to diplay
     socket.on("chatMessage", message => {
@@ -376,26 +377,29 @@ io.on("connection", socket => {
         savePrivateMessage(userId, dm.receiver, dm.message).then(data => {
             let receiverSocket;
             for (var key in onlineUsers) {
-                if (onlineUsers[key] == data.receiver_id) {
+                if (onlineUsers[key] == data.rows[0].receiver_id) {
                     receiverSocket = key;
+                    console.log("C");
+                    let message = {
+                        message: dm.message,
+                        sender: userId,
+                        imageurl: socket.request.session.imageUrl,
+                        created_at: data.rows[0].created_at,
+                        name: socket.request.session.firstname,
+                        surname: socket.request.session.lastname
+                    };
                     io.sockets.sockets[receiverSocket].emit(
                         "privateMessageDb",
-                        {
-                            dm,
-                            sender: userId,
-                            imageurl: socket.request.session.imageUrl,
-                            created_at: data.rows[0].created_at,
-                            name: socket.request.session.firstname,
-                            surname: socket.request.session.lastname
-                        }
+                        message
                     );
+
+                    socket.emit("privateMessageDb", message);
                 }
             }
         });
     });
 
     socket.on("privateChatHistory", data => {
-        console.log("THIS PEROSN SEND A MESSAGE", data);
         getPrivateMessages(userId, data).then(messages => {
             socket.emit("privateChatHistory", messages.rows.reverse());
         });

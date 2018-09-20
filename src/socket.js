@@ -28,7 +28,6 @@ export function getSocket(store) {
         });
 
         socket.on("chatMessage", data => {
-            console.log("DATA FROM SERVER IN SOCKET.JS", data);
             store.dispatch(chatMessage(data));
         });
 
@@ -37,12 +36,11 @@ export function getSocket(store) {
         });
 
         socket.on("privateMessageDb", data => {
-            console.log("PRIVATE MESSAGE DATA", data);
-            store.dispatch(privateMessage(data));
+            store.dispatch(newPrivateMessage(data));
         });
 
         socket.on("privateChatHistory", data => {
-            store.dispatch(newPrivateMessage(data));
+            store.dispatch(privateMessage(data));
         });
     }
 

@@ -102,8 +102,7 @@ img {
     border-radius: 50%;
 }
 
-.profile-image {
-}
+/* ############PROFILE ##############*/
 
 .profile-image img {
     height: 400px;
@@ -122,6 +121,17 @@ img {
     transform: rotate(180deg);
 }
 
+h2.friend-button {
+    border: 1px solid maroon;
+    width: fit-content;
+    padding: 1%;
+    writing-mode: vertical-rl;
+    position: absolute;
+    top: 32%;
+    right: 29%;
+    cursor: pointer;
+}
+
 /*############ BIO######## */
 p.bio-content {
     display: inline-block;
@@ -134,17 +144,40 @@ img.edit-bio {
     cursor: pointer;
 }
 
-.other-profile-wrap h1 {
+/* .other-profile-wrap h1 {
     color: tomato;
     font-size: 15rem;
     font-family: "Roboto Mono";
     margin: 0 auto;
-}
+} */
 
 /*############CHAT############*/
 .chat-wrap {
     max-height: 400px;
     overflow: auto;
+    border: 1px solid maroon;
+    width: 50%;
+    position: absolute;
+    left: 50%;
+    top: 18%;
+}
+
+.chat-messages {
+    border: 1px soild orange;
+}
+
+.friend-unit img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+.friends-wrap {
+    width: 30%;
+}
+
+.friend-unit {
+    width: 35%;
 }
 
 /*############FRIENDS############*/

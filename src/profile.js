@@ -43,7 +43,7 @@ export class Profile extends React.Component {
         } = this.props;
 
         return (
-            <div>
+            <div className="profile-wrap">
                 <div className="bio-section">
                     <h1>
                         {firstname} {lastname}

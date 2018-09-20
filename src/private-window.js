@@ -38,13 +38,16 @@ class PrivateChat extends React.Component {
         }
 
         return (
-            <div className="chat-wrap">
+            <div className="chat-wrap ">
                 <h2> Private Chat </h2>
-                <div className="chat-messages" ref={elem => (this.elem = elem)}>
+                <div
+                    className="chat-messages flex-container"
+                    ref={elem => (this.elem = elem)}
+                >
                     {privateMessages.map(message => {
                         return (
                             <div key={message.chatid} className="chat-unit">
-                                <img src={message.imageurl} />
+                                {/*<img src={message.imageurl} />*/}
                                 <p>{message.message} </p>
                                 <p>
                                     {message.name} {message.surname}{" "}
@@ -60,6 +63,7 @@ class PrivateChat extends React.Component {
 }
 
 function mapStateToProps(reduxState) {
+    console.log("IN PRIVATE WINDOW COMP", reduxState.privateMessages);
     return {
         privateMessages: reduxState.privateMessages
     };
