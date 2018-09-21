@@ -64,14 +64,14 @@ class PrivateChat extends React.Component {
           {privateMessages.map(message => {
             return (
               <div key={message.chatid} className="chat-unit">
-                <img
+                {/*<img
                   className="border-radius chat-image"
                   src={message.imageurl}
-                />
-                <p>{message.message} </p>
-                <p>
-                  {message.name} {message.surname}{" "}
+                />*/}
+                <p className="chat-sender inline">
+                  {message.name} {message.surname}:{" "}
                 </p>
+                <p className="inline">{message.message} </p>
               </div>
             );
           })}

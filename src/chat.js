@@ -9,6 +9,10 @@ class Chat extends React.Component {
     this.postMessage = this.postMessage.bind(this);
   }
 
+  // componentDidMount() {
+  //   this.elem.scrollTop = this.elem.scrollHeight - this.elem.clientHeight;
+  // }
+
   postMessage(e) {
     const socket = getSocket();
     if (e.which === 13) {
@@ -39,10 +43,10 @@ class Chat extends React.Component {
                   className="chat-image border-radius"
                   src={message.imageurl}
                 />
-                <p>{message.message} </p>
-                <p>
-                  {message.name} {message.surname}{" "}
+                <p className="chat-sender inline">
+                  {message.name} {message.surname}:
                 </p>
+                <p>{message.message} </p>
               </div>
             );
           })}
