@@ -31,14 +31,13 @@ export class App extends React.Component {
 
   makeUploaderVisible() {
     this.setState({
-      uploaderVisible: true
+      uploaderVisible: !this.state.uploaderVisible
     });
   }
 
   updateImage(imageUrl) {
     this.setState({
-      imageUrl: imageUrl,
-      uploaderVisible: false
+      imageUrl: imageUrl
     });
   }
 
