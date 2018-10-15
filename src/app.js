@@ -107,7 +107,6 @@ export class App extends React.Component {
             <Route path="/online" component={Online} />
             <Route exat path="/private-chat/" component={Private} />
           </div>
-          <b id="app-space" />
         </div>
       </BrowserRouter>
     );

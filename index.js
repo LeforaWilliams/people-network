@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const server = require("http").Server(app);
-const io = require("socket.io")(server, { origins: "localhost:8080" });
+const io = require("socket.io")(server, {
+  origins: "localhost:8080" || "https://people-network.herokuapp.com/*"
+});
 const {
   registerUser,
   loginUser,
@@ -315,7 +317,7 @@ app.get("*", (req, res) => {
 /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 /////////////////////////////////DO NOT TOUCH///////////////////////////////////
 
-server.listen(8080, () => {
+server.listen(process.env.PORT || 8080, () => {
   console.log("I'm listening.");
 });
 
